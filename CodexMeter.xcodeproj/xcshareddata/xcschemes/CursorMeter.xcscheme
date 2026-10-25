@@ -3,13 +3,13 @@
   <BuildAction parallelizeBuildables="YES" buildImplicitDependencies="YES">
     <BuildActionEntries>
       <BuildActionEntry buildForTesting="YES" buildForRunning="YES" buildForProfiling="YES" buildForArchiving="YES" buildForAnalyzing="YES">
-        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="6640C55A30227A8E001D6F08" BuildableName="ClaudeMeter.app" BlueprintName="ClaudeMeter" ReferencedContainer="container:CodexMeter.xcodeproj"/>
+        <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="6640C55A30227A8E001D6F08" BuildableName="CursorMeter.app" BlueprintName="CursorMeter" ReferencedContainer="container:CodexMeter.xcodeproj"/>
       </BuildActionEntry>
     </BuildActionEntries>
   </BuildAction>
   <LaunchAction buildConfiguration="Debug" selectedDebuggerIdentifier="Xcode.DebuggerFoundation.Debugger.LLDB" selectedLauncherIdentifier="Xcode.IDEFoundation.Launcher.LLDB" launchStyle="0" useCustomWorkingDirectory="NO" ignoresPersistentStateOnLaunch="NO" debugDocumentVersioning="YES" debugServiceExtension="internal" allowLocationSimulation="YES">
     <BuildableProductRunnable runnableDebuggingMode="0">
-      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="6640C55A30227A8E001D6F08" BuildableName="ClaudeMeter.app" BlueprintName="ClaudeMeter" ReferencedContainer="container:CodexMeter.xcodeproj"/>
+      <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="6640C55A30227A8E001D6F08" BuildableName="CursorMeter.app" BlueprintName="CursorMeter" ReferencedContainer="container:CodexMeter.xcodeproj"/>
     </BuildableProductRunnable>
   </LaunchAction>
   <ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES"/>

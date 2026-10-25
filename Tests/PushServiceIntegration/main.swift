@@ -6,8 +6,7 @@ final class AppSettings: ObservableObject {
     @Published var gotifyEnabled = false
     @Published var telegramEnabled = false
     @Published var discordEnabled = false
-    @Published var pushFiveHourResetEnabled = true
-    @Published var pushWeeklyResetEnabled = true
+    @Published var pushQuotaResetEnabled = true
     @Published var barkServerURL = "https://push.example"
     @Published var barkDeviceKey = "fake-key"
     @Published var barkIconURL = ""
@@ -111,8 +110,8 @@ final class FakePushProtocol: URLProtocol {
         }
         do {
             let (settings, service) = setup([(503, "{}", 0)])
-            trigger(service); wait(0.2); settings.pushFiveHourResetEnabled = false; wait(1.3)
-            check(FakePushProtocol.count == 1 && service.deliveryStatuses[.bark] == .idle, "disabling quota reset type cancels retry")
+            trigger(service); wait(0.2); settings.pushQuotaResetEnabled = false; wait(1.3)
+            check(FakePushProtocol.count == 1 && service.deliveryStatuses[.bark] == .idle, "disabling quota reset alerts cancels retry")
         }
         do {
             let (settings, service) = setup([(503, "{}", 0)])
@@ -127,7 +126,7 @@ final class FakePushProtocol: URLProtocol {
         do {
             let (_, service) = setup()
             service.evaluate(windows: [window(60, duration: 1440)]); service.evaluate(windows: [window(0, duration: 1440)]); wait(0.2)
-            check(FakePushProtocol.count == 0, "unsupported reset duration is ignored")
+            check(FakePushProtocol.count == 1, "returned daily quota reset is supported")
         }
         do {
             let (_, service) = setup()
@@ -148,6 +147,15 @@ final class FakePushProtocol: URLProtocol {
             wait(1.2)
             check(FakePushProtocol.count == 3 && service.deliveryStatuses[.bark] == .sent, "real delivery still completes after concurrent test")
         }
-        print("All 13 real-service fake-transport scenarios passed; no remote request sent.")
+        do {
+            let (_, service) = setup()
+            let used = CodexUsageWindow(id: "cursor-included", name: "Included", usedPercent: 60,
+                                        windowDurationMins: nil, resetsAt: nil)
+            let restored = CodexUsageWindow(id: "cursor-included", name: "Included", usedPercent: 0,
+                                            windowDurationMins: nil, resetsAt: nil)
+            service.evaluate(windows: [used]); service.evaluate(windows: [restored]); wait(0.2)
+            check(FakePushProtocol.count == 0, "unknown reset timing does not send a reset notification")
+        }
+        print("All 14 real-service fake-transport scenarios passed; no remote request sent.")
     }
 }

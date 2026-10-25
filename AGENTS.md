@@ -1,120 +1,123 @@
-# ClaudeMeter Development Guide
+# CursorMeter Development Guide
 
 ## Product and identity
 
-ClaudeMeter is a native macOS 13+ menu bar app, derived from Raycal's
-MIT-licensed CodexMeter (upstream 4c6baee, version 1.7.0). Preserve LICENSE and
-upstream attribution. Current port version: 0.1.5, build 6.
+CursorMeter is a native macOS 13+ menu bar app for Apple Silicon, adapted from
+ClaudeMeter and Raycal's MIT-licensed CodexMeter (upstream 4c6baee, version 1.7.0).
+Preserve LICENSE and both projects' attribution. Current version: 0.1.0, build 1.
 
-- App product/display name: ClaudeMeter; bundle identifier: com.huang.ClaudeMeter.
-- Keep internal CodexMeter source paths and core type names to make the fork
-  easy to compare with upstream. The shared Xcode scheme is ClaudeMeter.
-- Keep LSUIElement enabled and use native Apple frameworks. The app launches
-  the locally installed Claude CLI, so the App Sandbox remains disabled.
-- Store history under Application Support/ClaudeMeter, use .claudemeterbackup
-  archives, and keep push credentials under com.huang.ClaudeMeter.pushCredentials.
-- Updates use Sparkle 2.10.0, the repository's signed appcast.xml on raw GitHub,
-  and this repository's GitHub Release assets. Preserve the dedicated public
-  EdDSA key; the private key stays in login Keychain account com.huang.ClaudeMeter.
-  Keep feed and pre-extraction archive signature verification enabled. Never
-  reuse upstream signing keys or feeds. Automatic installation defaults off.
-- Version 0.1.3 and earlier require one manual upgrade to 0.1.4. Verify updater
-  download/install/relaunch with an isolated older-build copy; preserve user data.
-  Upload working release assets before publishing the new signed feed.
+- Product/display name: CursorMeter; bundle identifier: com.huang.CursorMeter.
+- Repository: HY916-cn/CursorMeter. Keep internal CodexMeter source paths and
+  core type names for upstream comparison. Shared Xcode scheme: CursorMeter.
+- Keep LSUIElement enabled and use native Apple frameworks. Installed official
+  Cursor CLI access requires the current non-sandboxed app configuration.
+- Store history under Application Support/CursorMeter; use .cursormeterbackup
+  archives and com.huang.CursorMeter.pushCredentials for Keychain credentials.
+- Sparkle 2.10.0 uses this repository's GitHub feed and Release assets. Preserve
+  CursorMeter's independent public key, signed feed and archive verification.
+  The private EdDSA key stays in login Keychain account com.huang.CursorMeter.
+  Check daily; automatic installation and prerelease inclusion default off.
+- Upload and verify downloadable Release assets before publishing the signed
+  appcast. Validate install/relaunch using an isolated app copy and preserve data.
 
-## Source architecture and privacy
+## CLI integration and first run
 
-- CodexMeterApp.swift owns the shared service, settings, history, and windows.
-- CodexUsageService.swift adapts installed Claude Code: account status comes
-  from `claude auth status --json`; quota comes from interactive `/usage` via
-  a bounded pseudo-terminal process. Core/Claude*.swift isolates the CLI
-  discovery, process handling, and parser for tests.
-- Claude owns authentication. Do not read auth files, extract access tokens,
-  or add undocumented direct HTTP usage calls. Do not submit model prompts
-  while collecting quota. Keep CLI tools and hooks disabled. Disable telemetry
-  and error reporting individually; do not inject
-  CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC, which blocks usage queries in CLI 2.1.302.
-- Require users to finish CLI setup and workspace trust themselves; do not
-  auto-accept permission or trust prompts. Handle exit, timeout, malformed
-  output, setup requirements, and sign-out explicitly.
-- Keep the CLI child environment's PWD equal to its dedicated working directory;
-  inherited workspace paths can stall startup from a desktop launch. Verify
-  refreshes from the app launched through Launch Services as well as CLI tests.
-- Terminal output is an unstable interface. Match only complete quota panels,
-  bound process duration/output, drain output, stop child processes on failure,
-  and show locally authored errors rather than raw CLI output.
-- Do not persist raw CLI responses, authentication data, or account emails.
-  Partition history using a salted pseudonymous account identity. Clear the
-  previous account's visible state when login identity changes.
-- On account activation, restore the last successful account-scoped history
-  snapshot as stale, preserving its observation date. Never replace fresh CLI
-  results with a delayed history read or evaluate alerts from restored data.
-- Failed refreshes retain the last successful snapshot and mark it stale.
-  Keep concurrent refreshes bounded and prevent duplicate requests.
-- Poll every 10 seconds with the popover open and every 60 seconds in the
-  background. On popover open or system wake, refresh if the last attempt was
-  at least 10 seconds ago; preserve failure cooldowns and single-flight protection.
-  Manual refreshes require 10 seconds between attempts and honor failure cooldowns. Cached or rate-limited responses back off for 5, 10, 20,
-  then 30 minutes; show the retry time and preserve the last successful sample.
-  Missing account identity permits live display only; do not persist history or deliver quota alerts for an unidentified account.
-- Localizable.xcstrings contains English, Simplified Chinese, and Traditional
-  Chinese UI strings. Keep source comments in English.
+- CodexMeterApp.swift owns the service, settings, history, and windows.
+  CodexUsageService.swift adapts the installed official Cursor CLI. Keep CLI
+  discovery, bounded process handling, parsing, and refresh policy testable in Core.
+- Read account identity from nested `userInfo` in `agent status --format json`;
+  use `agent about --format json` for supplementary plan/tier metadata. Query quota by starting interactive
+  `agent` in a pseudo-terminal and entering `/usage` inside its terminal UI.
+- Cursor owns authentication. Do not read authentication files, extract tokens,
+  call undocumented direct usage HTTP endpoints, or submit model tasks to get quota.
+  Official CLI startup may execute user-configured startup hooks or load MCP
+  configuration. Do not claim these are disabled without verified CLI support.
+- Users personally perform `agent login`, initial setup, and directory trust.
+  Never auto-accept setup, trust, or permission prompts. Handle sign-out and
+  incomplete setup explicitly with a link to README's `#first-run` tutorial.
+- The tutorial must prominently show this sequence: official installer at
+  https://cursor.com/install; verify `agent --version` and ~/.local/bin PATH;
+  `agent login`; create and enter ~/Library/Application Support/CursorMeter/CLI;
+  launch `agent`; complete prompts personally; enter `/usage` in the TUI and
+  confirm real quota; then open CursorMeter. Retain GitHub IMPORTANT/WARNING
+  callouts and concrete repair instructions. Login alone does not finish setup.
+- Set child PWD to the dedicated CLI directory. Desktop launches must use the
+  same environment and directory semantics as the tested CLI integration.
+- Terminal output is unstable. Require complete recognized quota panels, bound
+  runtime/output, drain output, clean up child processes, and show locally authored
+  errors rather than exposing raw CLI output.
 
-## UI and data invariants
+## Data and UI invariants
 
-- Preserve the configurable menu bar, popover, independent history window,
-  settings, backup/restore, accessibility, notifications, and developer previews.
-- Quota is `100 - usedPercent`, clamped to 0...100. Never fabricate zero use
-  from missing data. Keep token counts and quota percentages separate.
-- Only compute reset countdowns, time progress, and pace when duration and reset
-  time are known. Keep each returned quota window independently selectable.
-- Claude CLI /usage does not expose daily token history or banked resets.
-  Preserve honest unavailable states; do not invent statistics or reset credits.
+- Preserve configurable menu bar/popover, independent history/settings windows,
+  backup/restore, accessibility, notifications, localization, and developer previews.
+- Cursor's official 2026.07.13 CLI changelog describes included Auto/API pools,
+  on-demand spend against a limit, plan names, and billing reset dates. Parse
+  supported data actually returned; do not assume every account exposes all fields.
+- Keep window names and periods dynamic. Quota is `100 - usedPercent`, clamped
+  to 0...100. Do not turn missing values or unsupported output into zero use.
+- The verified live panel showed Premium, Included/Auto/API quota pools, an
+  on-demand spend amount, and No monthly limit. Treat these as one observed
+  account, not guarantees for every plan. Keep returned windows selectable.
+- Only derive percentages from monetary values when a valid budget denominator
+  is present. An unlimited on-demand budget does not yield a remaining percentage.
+- Live reset output supplies month/day text such as `Resets Nov 1`, without a
+  year, exact time, or cycle start. Display that text as returned; current output
+  does not support an exact countdown, time progress, or pace estimation. Never
+  fabricate the missing fields or assume a fixed billing-cycle duration.
+- Token activity, daily token counts, and banked reset opportunities stay
+  unavailable when not supplied. Never infer token counts from quota percentages.
+- Partition history using salted account identity; never persist raw CLI output,
+  authentication data, or email. Clear visible old-account quota on identity change.
+- Restore the last account-scoped history snapshot as stale with its observation
+  date intact. Do not let delayed history reads overwrite fresh results or trigger
+  quota alerts. Failed refreshes keep the last good sample and mark it stale.
+- Missing account identity permits live display only; pause persistence and alerts.
+- Poll every 10 seconds with the popover open and every 60 seconds in background.
+  Popover-open/wake refreshes require at least 10 seconds since the last attempt.
+  Manual refreshes also require 10 seconds. Keep single-flight protection and
+  honor failure cooldowns; cached/rate-limited responses back off 5, 10, 20,
+  then 30 minutes and recover to normal scheduling after success.
 - Record successful non-stale changes and periodic 15-minute history anchors.
-  Keep cycle boundaries, calendar browsing, explicit missing-data shading, raw
-  sample persistence, and conservative consumption estimates intact.
-- Preserve account-scoped CSV exports and all-account lossless backups.
-  Backups must be transactionally consistent, size bounded, integrity checked,
-  and recoverable after an interrupted restore. Restore replaces existing
-  history and pauses further writes until the app restarts.
-- Push channels default off, use HTTPS without redirects, store credentials
-  in Keychain, redact diagnostics, and retain bounded retry/deduplication logic.
-  Preview data must never send notifications or enter live history.
-- Preference changes must preserve SwiftUI and host-window appearance behavior,
-  menu-bar accessibility, and independent resizable history/settings windows.
+  Preserve cycle boundaries, calendar browsing, missing-data shading, raw samples,
+  conservative consumption estimates, and account-scoped CSV exports.
+- Backups preserve every account partition. Keep them transactionally consistent,
+  bounded, integrity-checked, and recoverable after interruptions. Restore replaces
+  history and pauses writes until restart; preserve the user's credentials.
+- Push channels default off, use HTTPS without redirects, keep credentials in
+  Keychain, redact diagnostics, and retain bounded retry/deduplication. Preview
+  data must never enter live history or send notifications.
+- Keep English, Simplified Chinese, and Traditional Chinese strings synchronized
+  in Localizable.xcstrings. Keep source comments in English.
 
 ## Verification and maintenance
 
-Read the repository state before editing and keep changes scoped to the task.
-Keep README.md and this file aligned with actual capabilities and known limits.
-Do not claim a live authenticated refresh from fixture/parser tests alone.
+Inspect repository state before editing and scope changes to the task. Keep
+README.md and this guide aligned with implementation and verified limitations.
+Do not claim authenticated account acceptance based on fixture tests alone.
 
 ```bash
 swift test
-bash Scripts/test_claude_cli.sh
-bash Scripts/test_claude_recovery.sh
-bash Scripts/test_claude_service.sh
+bash Scripts/test_cursor_cli.sh
+bash Scripts/test_cursor_recovery.sh
+bash Scripts/test_cursor_service.sh
 bash Scripts/test_push_service.sh
 bash Scripts/build_local.sh
 git diff --check
-xcodebuild -project CodexMeter.xcodeproj -scheme ClaudeMeter \
+xcodebuild -project CodexMeter.xcodeproj -scheme CursorMeter \
   -configuration Debug -destination 'platform=macOS' \
   CODE_SIGNING_ALLOWED=NO build
 ```
 
-Use an installed full Xcode if xcodebuild is selected to Command Line Tools.
-The local build script can use Swift 6.4 with the installed macOS 26.5 SDK,
-Python 3, iconutil, and ad-hoc signing. macOS 27 SwiftUI macros require the
-Xcode plugin. The CLI integration checks run without XCTest; the complete
-upstream Swift Package test suite requires XCTest from Xcode.
-The upstream project requires a recent Swift compiler and SDK (Xcode 27 beta
-or later). Test login-item and notification behavior with a locally signed app.
-UI changes require launching one app instance, opening its menu-bar popover,
-and checking the affected controls. Real quota acceptance requires a signed-in
-Claude subscription and a successful live /usage read. Keep push integration
-checks isolated with fake credentials and URLProtocol; never contact real push
-endpoints during tests.
+Use full Xcode when selected tools lack XCTest or the required SwiftUI macros.
+The local build uses a recent Swift compiler, compatible macOS SDK, Python 3,
+iconutil, and ad-hoc signing; the script supports the installed 26.5 SDK.
+Run push tests with fake credentials and isolated responses, without contacting
+real notification endpoints. Test login items and notification permissions in
+an actual signed app. UI changes require launching one app instance and checking
+the affected menu-bar and window controls. Live quota acceptance requires a
+personally initialized Cursor CLI session and successful authenticated `/usage`
+refresh from the app launched through Launch Services.
 
-Commit completed changes. Push major changes only to a repository for which
-the user has authorized writes; an upstream fetch URL is attribution, not
-permission to publish a fork there.
+Commit completed changes. Push major changes to the user-authorized repository;
+upstream attribution does not authorize writes to an upstream project.

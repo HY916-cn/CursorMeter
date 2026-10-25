@@ -25,7 +25,7 @@
 	<key>LSUIElement</key>
 	<true/>
 	<key>CFBundleDisplayName</key>
-	<string>ClaudeMeter</string>
+	<string>CursorMeter</string>
 	<key>SUAllowsAutomaticUpdates</key>
 	<true/>
 	<key>SUAutomaticallyUpdate</key>
@@ -33,9 +33,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/HY916-cn/ClaudeMeter/main/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>LgSedMIScObYXQvoTs0QvbkWW78lPh0ihl5vM+NT0ts=</string>
+	<string>https://raw.githubusercontent.com/HY916-cn/CursorMeter/main/appcast.xml</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 	<key>SUVerifyUpdateBeforeExtraction</key>
@@ -44,5 +42,7 @@
 	<true/>
 	<key>SUSendProfileInfo</key>
 	<false/>
+	<key>SUPublicEDKey</key>
+	<string>W+YqDGv4ScLc9jkxAm81pDFiZDFl1vsnvgOMqXoe28Y=</string>
 </dict>
 </plist>

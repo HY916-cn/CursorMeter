@@ -240,12 +240,8 @@ final class AppSettings: ObservableObject {
 
     @Published private(set) var pushCredentialError: String?
 
-    @Published var pushFiveHourResetEnabled: Bool {
-        didSet { defaults.set(pushFiveHourResetEnabled, forKey: Keys.pushFiveHourResetEnabled) }
-    }
-
-    @Published var pushWeeklyResetEnabled: Bool {
-        didSet { defaults.set(pushWeeklyResetEnabled, forKey: Keys.pushWeeklyResetEnabled) }
+    @Published var pushQuotaResetEnabled: Bool {
+        didSet { defaults.set(pushQuotaResetEnabled, forKey: Keys.pushQuotaResetEnabled) }
     }
 
     @Published var historyRetention: HistoryRetention {
@@ -321,8 +317,7 @@ final class AppSettings: ObservableObject {
         static let telegramEnabled = "push.telegramEnabled"
         static let telegramChatID = "push.telegramChatID"
         static let discordEnabled = "push.discordEnabled"
-        static let pushFiveHourResetEnabled = "push.fiveHourResetEnabled"
-        static let pushWeeklyResetEnabled = "push.weeklyResetEnabled"
+        static let pushQuotaResetEnabled = "push.quotaResetEnabled"
         static let historyRetention = "history.retention"
         static let includePrereleaseUpdates = "updates.includePrereleases"
         static let developerAppearance = "developer.appearance"
@@ -373,16 +368,7 @@ final class AppSettings: ObservableObject {
         notificationsEnabled = defaults.bool(forKey: Keys.notificationsEnabled)
         let storedThreshold = defaults.integer(forKey: Keys.notificationThreshold)
         notificationThreshold = storedThreshold == 0 ? 20 : storedThreshold
-        if defaults.object(forKey: Keys.pushFiveHourResetEnabled) != nil {
-            pushFiveHourResetEnabled = defaults.bool(forKey: Keys.pushFiveHourResetEnabled)
-        } else {
-            pushFiveHourResetEnabled = true
-        }
-        if defaults.object(forKey: Keys.pushWeeklyResetEnabled) != nil {
-            pushWeeklyResetEnabled = defaults.bool(forKey: Keys.pushWeeklyResetEnabled)
-        } else {
-            pushWeeklyResetEnabled = true
-        }
+        pushQuotaResetEnabled = defaults.bool(forKey: Keys.pushQuotaResetEnabled)
         barkEnabled = defaults.bool(forKey: Keys.barkEnabled)
         barkServerURL = defaults.string(forKey: Keys.barkServerURL) ?? "https://api.day.app"
         barkDeviceKey = loadedCredentials[.barkDeviceKey]?.value ?? ""
@@ -564,7 +550,7 @@ final class AppSettings: ObservableObject {
         let urlString: String
         switch settingsDestination {
         case .notifications:
-            let bundleID = Bundle.main.bundleIdentifier ?? "com.huang.ClaudeMeter"
+            let bundleID = Bundle.main.bundleIdentifier ?? "com.huang.CursorMeter"
             urlString = "x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=\(bundleID)"
         case .loginItems:
             urlString = "x-apple.systempreferences:com.apple.LoginItems-Settings.extension"

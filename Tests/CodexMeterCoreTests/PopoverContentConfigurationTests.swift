@@ -4,17 +4,17 @@ import XCTest
 final class PopoverContentConfigurationTests: XCTestCase {
     func testDefaultsShowEverySectionAndQuotaWindow() {
         let configuration = PopoverContentConfiguration.defaultValue
-        let fiveHour = makeWindow(id: "claude-primary", name: "5h", duration: 300, used: 20)
-        let weekly = makeWindow(
-            id: "claude-secondary",
-            name: "Weekly quota",
-            duration: 10_080,
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 20)
+        let auto = makeWindow(
+            id: "cursor-auto",
+            name: "Auto",
+            duration: nil,
             used: 30
         )
-        let reserve = makeWindow(
-            id: "claude-sonnet-only-primary",
-            name: "Sonnet · Weekly quota",
-            duration: 10_080,
+        let api = makeWindow(
+            id: "cursor-api",
+            name: "API",
+            duration: nil,
             used: 0
         )
 
@@ -26,89 +26,102 @@ final class PopoverContentConfigurationTests: XCTestCase {
             configuration.sectionOrder,
             [.quotaWindows, .resetCredits, .quotaHistory, .tokenActivity]
         )
-        XCTAssertTrue(configuration.isQuotaWindowVisible(fiveHour))
-        XCTAssertTrue(configuration.isQuotaWindowVisible(weekly))
-        XCTAssertTrue(configuration.isQuotaWindowVisible(reserve))
+        XCTAssertTrue(configuration.isQuotaWindowVisible(included))
+        XCTAssertTrue(configuration.isQuotaWindowVisible(auto))
+        XCTAssertTrue(configuration.isQuotaWindowVisible(api))
         XCTAssertNil(configuration.menuBarQuotaWindowID)
     }
 
     func testQuotaWindowsCanBeHiddenIndependentlyByStableIdentity() {
         var configuration = PopoverContentConfiguration.defaultValue
-        let fiveHour = makeWindow(id: "claude-primary", name: "5h", duration: 300, used: 20)
-        let weekly = makeWindow(id: "claude-secondary", name: "Weekly", duration: 10_080, used: 30)
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 20)
+        let auto = makeWindow(id: "cursor-auto", name: "Auto", duration: nil, used: 30)
 
-        configuration.setQuotaWindow(fiveHour, visible: false)
+        configuration.setQuotaWindow(included, visible: false)
 
-        XCTAssertFalse(configuration.isQuotaWindowVisible(fiveHour))
-        XCTAssertTrue(configuration.isQuotaWindowVisible(weekly))
-        XCTAssertEqual(configuration.visibleQuotaWindows(from: [fiveHour, weekly]), [weekly])
+        XCTAssertFalse(configuration.isQuotaWindowVisible(included))
+        XCTAssertTrue(configuration.isQuotaWindowVisible(auto))
+        XCTAssertEqual(configuration.visibleQuotaWindows(from: [included, auto]), [auto])
     }
 
     func testSelectedMenuBarWindowUsesPersistedStableIdentity() {
         var configuration = PopoverContentConfiguration.defaultValue
-        let fiveHour = makeWindow(id: "claude-primary", name: "5h", duration: 300, used: 80)
-        let weekly = makeWindow(id: "claude-secondary", name: "Weekly", duration: 10_080, used: 20)
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 80)
+        let auto = makeWindow(id: "cursor-auto", name: "Auto", duration: nil, used: 20)
 
-        configuration.menuBarQuotaWindowID = weekly.historyID
+        configuration.menuBarQuotaWindowID = auto.historyID
 
-        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [fiveHour, weekly]), weekly)
+        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [included, auto]), auto)
     }
 
     func testMissingMenuBarSelectionFallsBackToLowestRemainingQuota() {
         var configuration = PopoverContentConfiguration.defaultValue
         configuration.menuBarQuotaWindowID = "duration:999:missing"
-        let fiveHour = makeWindow(id: "claude-primary", name: "5h", duration: 300, used: 80)
-        let weekly = makeWindow(id: "claude-secondary", name: "Weekly", duration: 10_080, used: 20)
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 80)
+        let auto = makeWindow(id: "cursor-auto", name: "Auto", duration: nil, used: 20)
 
-        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [weekly, fiveHour]), fiveHour)
+        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [auto, included]), included)
     }
 
-    func testAutomaticSelectionUsesWeeklyQuotaWhenItHasLessRemaining() {
+    func testAutomaticSelectionUsesAutoWhenItHasLessRemaining() {
         let configuration = PopoverContentConfiguration.defaultValue
-        let fiveHour = makeWindow(id: "claude-primary", name: "5h", duration: 300, used: 20)
-        let weekly = makeWindow(
-            id: "claude-secondary",
-            name: "Weekly quota",
-            duration: 10_080,
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 20)
+        let auto = makeWindow(
+            id: "cursor-auto",
+            name: "Auto",
+            duration: nil,
             used: 90
         )
 
-        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [fiveHour, weekly]), weekly)
+        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [included, auto]), auto)
     }
 
-    func testAutomaticSelectionUsesLowestRemainingAcrossWeeklyBuckets() {
+    func testAutomaticSelectionUsesLowestRemainingAcrossCursorPools() {
         let configuration = PopoverContentConfiguration.defaultValue
-        let reserve = makeWindow(
-            id: "claude-sonnet-only-primary",
-            name: "Sonnet · Weekly quota",
-            duration: 10_080,
+        let api = makeWindow(
+            id: "cursor-api",
+            name: "API",
+            duration: nil,
             used: 90
         )
-        let weekly = makeWindow(
-            id: "claude-secondary",
-            name: "Weekly quota",
-            duration: 10_080,
+        let auto = makeWindow(
+            id: "cursor-auto",
+            name: "Auto",
+            duration: nil,
             used: 76
         )
 
-        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [reserve, weekly]), reserve)
+        XCTAssertEqual(configuration.selectedMenuBarWindow(from: [api, auto]), api)
     }
 
-    func testHistoryDefaultIgnoresOtherWeeklyBuckets() {
-        let reserve = QuotaHistoryWindow(
-            id: "duration:10080:claude-sonnet-only",
-            name: "Sonnet · Weekly quota",
-            windowDurationMins: 10_080,
-            resetsAt: nil
-        )
-        let weekly = QuotaHistoryWindow(
-            id: "duration:10080:claude",
-            name: "Weekly quota",
-            windowDurationMins: 10_080,
-            resetsAt: nil
-        )
+    func testHistoryDefaultPreservesFirstCursorPoolWhenDurationsAreUnknown() {
+        let included = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 20)
+        let auto = makeWindow(id: "cursor-auto", name: "Auto", duration: nil, used: 90)
+        let api = makeWindow(id: "cursor-api", name: "API", duration: nil, used: 30)
+        let windows = [included, auto, api]
+        let historyWindows = windows.map {
+            QuotaHistoryWindow(id: $0.historyID, name: $0.name,
+                               windowDurationMins: $0.windowDurationMins, resetsAt: $0.resetsAt)
+        }
 
-        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: [reserve, weekly]), weekly)
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: windows), included)
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: historyWindows), historyWindows[0])
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: [api, auto, included]), api)
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: Array(historyWindows.reversed())), historyWindows[2])
+    }
+
+    func testHistoryDefaultPrefersLongestKnownDuration() {
+        let unknown = makeWindow(id: "cursor-included", name: "Included", duration: nil, used: 90)
+        let shorter = makeWindow(id: "shorter", name: "Shorter", duration: 60, used: 20)
+        let longer = makeWindow(id: "longer", name: "Longer", duration: 120, used: 30)
+        let windows = [unknown, shorter, longer]
+        let historyWindows = windows.map {
+            QuotaHistoryWindow(id: $0.historyID, name: $0.name,
+                               windowDurationMins: $0.windowDurationMins, resetsAt: $0.resetsAt)
+        }
+
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: windows), longer)
+        XCTAssertEqual(QuotaWindowSelection.preferredDefault(from: historyWindows), historyWindows[2])
     }
 
     func testMovingSectionChangesOnlyItsStoredOrder() {
@@ -136,7 +149,7 @@ final class PopoverContentConfigurationTests: XCTestCase {
     private func makeWindow(
         id: String,
         name: String,
-        duration: Int,
+        duration: Int?,
         used: Int
     ) -> CodexUsageWindow {
         CodexUsageWindow(
@@ -144,7 +157,7 @@ final class PopoverContentConfigurationTests: XCTestCase {
             name: name,
             usedPercent: used,
             windowDurationMins: duration,
-            resetsAt: Date(timeIntervalSince1970: 2_000_000_000)
+            resetsAt: nil
         )
     }
 }

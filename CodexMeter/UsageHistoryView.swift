@@ -114,7 +114,7 @@ struct UsageHistoryView: View {
 
     private var cards: some View {
         VStack(alignment: .leading, spacing: 18) {
-            weeklyQuotaCard
+            quotaHistoryCard
             tokenActivityCard
             storageCard
 
@@ -127,7 +127,7 @@ struct UsageHistoryView: View {
         }
     }
 
-    private var weeklyQuotaCard: some View {
+    private var quotaHistoryCard: some View {
         VStack(alignment: .leading, spacing: 18) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 3) {
@@ -200,8 +200,10 @@ struct UsageHistoryView: View {
                 HStack(spacing: 16) {
                     Label(L10n.string("history.legend.actual"), systemImage: "waveform.path")
                         .foregroundStyle(HistoryPalette.accentBright)
-                    Label(L10n.string("history.legend.ideal"), systemImage: "line.diagonal")
-                        .foregroundStyle(.secondary)
+                    if !series.idealSegments.isEmpty {
+                        Label(L10n.string("history.legend.ideal"), systemImage: "line.diagonal")
+                            .foregroundStyle(.secondary)
+                    }
                     if !series.gaps.isEmpty {
                         Label(L10n.string("history.legend.gap"), systemImage: "rectangle.inset.filled")
                             .foregroundStyle(.secondary)
@@ -209,7 +211,9 @@ struct UsageHistoryView: View {
                 }
                 .font(.caption)
 
-                if quotaMode == .currentCycle {
+                if quotaMode == .currentCycle,
+                   selectedWindow?.windowDurationMins != nil,
+                   selectedWindow?.resetsAt != nil {
                     estimateView(samples: currentCycle?.samples ?? [])
                 }
             } else if isLoadingCalendarQuota {
@@ -601,7 +605,7 @@ struct UsageHistoryView: View {
                 let data = try await history.exportCSV()
                 let panel = NSSavePanel()
                 panel.allowedContentTypes = [.commaSeparatedText]
-                panel.nameFieldStringValue = "ClaudeMeter-History.csv"
+                panel.nameFieldStringValue = "CursorMeter-History.csv"
                 guard panel.runModal() == .OK, let url = panel.url else { return }
                 try data.write(to: url, options: .atomic)
                 actionError = nil

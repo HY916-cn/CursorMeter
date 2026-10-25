@@ -32,7 +32,7 @@ case "${archive_path:e:l}" in
         ;;
 esac
 
-work_directory="$(mktemp -d "${TMPDIR:-/tmp}/claudemeter-appcast.XXXXXX")"
+work_directory="$(mktemp -d "${TMPDIR:-/tmp}/cursormeter-appcast.XXXXXX")"
 trap 'rm -rf "$work_directory"' EXIT
 
 cp "$archive_path" "$work_directory/"
@@ -50,10 +50,10 @@ for notes_extension in html md txt; do
 done
 
 arguments=(
-    --account com.huang.ClaudeMeter
-    --download-url-prefix "https://github.com/HY916-cn/ClaudeMeter/releases/download/${release_tag}/"
-    --full-release-notes-url "https://github.com/HY916-cn/ClaudeMeter/releases/tag/${release_tag}"
-    --link "https://github.com/HY916-cn/ClaudeMeter/releases/tag/${release_tag}"
+    --account com.huang.CursorMeter
+    --download-url-prefix "https://github.com/HY916-cn/CursorMeter/releases/download/${release_tag}/"
+    --full-release-notes-url "https://github.com/HY916-cn/CursorMeter/releases/tag/${release_tag}"
+    --link "https://github.com/HY916-cn/CursorMeter/releases/tag/${release_tag}"
     --maximum-deltas 0
     -o "$project_directory/appcast.xml"
 )

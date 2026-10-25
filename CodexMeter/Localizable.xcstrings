@@ -78,19 +78,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter is derived from CodexMeter by Raycal. Distributed under the MIT License. Copyright © 2026 Raycal."
+            "value": "CursorMeter is derived from CodexMeter by Raycal. Distributed under the MIT License. Copyright © 2026 Raycal."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 基于 Raycal 开发的 CodexMeter，遵循 MIT 许可证。Copyright © 2026 Raycal。"
+            "value": "CursorMeter 基于 Raycal 开发的 CodexMeter，遵循 MIT 许可证。Copyright © 2026 Raycal。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 衍生自 Raycal 開發的 CodexMeter，依 MIT 授權條款散布。Copyright © 2026 Raycal。"
+            "value": "CursorMeter 衍生自 Raycal 開發的 CodexMeter，依 MIT 授權條款散布。Copyright © 2026 Raycal。"
           }
         }
       }
@@ -146,19 +146,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quota history stays on this Mac. ClaudeMeter invokes your installed Claude CLI and leaves authentication to it. It stores no account email, authentication token, or raw CLI response. Optional remote notifications send the quota-window name and observed remaining quota to your chosen service; push credentials stay in Keychain. Software update checks contact GitHub; quota history is not included."
+            "value": "Quota history stays on this Mac. CursorMeter invokes your installed Cursor CLI and leaves authentication to it. It stores no account email, authentication token, or raw CLI response. Optional remote notifications send the quota-window name and observed remaining quota to your chosen service; push credentials stay in Keychain. Software update checks contact GitHub; quota history is not included."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "额度历史保存在这台 Mac。ClaudeMeter 调用已安装的 Claude CLI，由 CLI 管理认证；不保存账户邮箱、认证 Token 或 CLI 原始响应。可选远程通知向指定服务发送额度窗口名称和观测到的剩余额度，推送密钥保存在钥匙串中。 软件更新检查会连接 GitHub，不携带额度历史。"
+            "value": "额度历史保存在这台 Mac。CursorMeter 调用已安装的 Cursor CLI，由 CLI 管理认证；不保存账户邮箱、认证 Token 或 CLI 原始响应。可选远程通知向指定服务发送额度窗口名称和观测到的剩余额度，推送密钥保存在钥匙串中。 软件更新检查会连接 GitHub，不携带额度历史。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "額度歷史儲存在這台 Mac。ClaudeMeter 呼叫已安裝的 Claude CLI，由 CLI 管理驗證；不儲存帳戶電子郵件、驗證 Token 或 CLI 原始回應。可選遠端通知向指定服務傳送額度視窗名稱和觀測到的剩餘額度，推播金鑰儲存在鑰匙圈中。 軟體更新檢查會連線 GitHub，不包含額度歷史。"
+            "value": "額度歷史儲存在這台 Mac。CursorMeter 呼叫已安裝的 Cursor CLI，由 CLI 管理驗證；不儲存帳戶電子郵件、驗證 Token 或 CLI 原始回應。可選遠端通知向指定服務傳送額度視窗名稱和觀測到的剩餘額度，推播金鑰儲存在鑰匙圈中。 軟體更新檢查會連線 GitHub，不包含額度歷史。"
           }
         }
       }
@@ -192,19 +192,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "About ClaudeMeter"
+            "value": "About CursorMeter"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "关于 ClaudeMeter"
+            "value": "关于 CursorMeter"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "關於 ClaudeMeter"
+            "value": "關於 CursorMeter"
           }
         }
       }
@@ -284,19 +284,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude %@"
+            "value": "Cursor %@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude %@"
+            "value": "Cursor %@"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude %@"
+            "value": "Cursor %@"
           }
         }
       }
@@ -491,19 +491,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter"
+            "value": "CursorMeter"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter"
+            "value": "CursorMeter"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter"
+            "value": "CursorMeter"
           }
         }
       }
@@ -652,19 +652,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not complete the operation. Check file access and free space. Restore requires a valid backup from a supported ClaudeMeter version."
+            "value": "Could not complete the operation. Check file access and free space. Restore requires a valid backup from a supported CursorMeter version."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "操作未完成。请检查文件权限与可用空间。恢复需要使用受支持版本生成的有效 ClaudeMeter 备份。"
+            "value": "操作未完成。请检查文件权限与可用空间。恢复需要使用受支持版本生成的有效 CursorMeter 备份。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "操作未完成。請檢查檔案權限與可用空間。還原需要使用受支援版本產生的有效 ClaudeMeter 備份。"
+            "value": "操作未完成。請檢查檔案權限與可用空間。還原需要使用受支援版本產生的有效 CursorMeter 備份。"
           }
         }
       }
@@ -675,19 +675,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Quit ClaudeMeter"
+            "value": "Quit CursorMeter"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "退出 ClaudeMeter"
+            "value": "退出 CursorMeter"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "結束 ClaudeMeter"
+            "value": "結束 CursorMeter"
           }
         }
       }
@@ -698,19 +698,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "History collection is paused. Quit and reopen ClaudeMeter to use the restored history. Your current retention setting will apply after reopening."
+            "value": "History collection is paused. Quit and reopen CursorMeter to use the restored history. Your current retention setting will apply after reopening."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "历史记录已暂停写入。请退出并重新打开 ClaudeMeter，以使用恢复的历史。重新打开后将应用当前的历史保留期限设置。"
+            "value": "历史记录已暂停写入。请退出并重新打开 CursorMeter，以使用恢复的历史。重新打开后将应用当前的历史保留期限设置。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "歷史記錄已暫停寫入。請結束並重新開啟 ClaudeMeter，以使用還原的歷史。重新開啟後將套用目前的歷史保留期限設定。"
+            "value": "歷史記錄已暫停寫入。請結束並重新開啟 CursorMeter，以使用還原的歷史。重新開啟後將套用目前的歷史保留期限設定。"
           }
         }
       }
@@ -3021,19 +3021,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "This Claude CLI does not support the requested feature."
+            "value": "This Cursor CLI does not support the requested feature."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "当前 Claude CLI 不支持请求的功能。"
+            "value": "当前 Cursor CLI 不支持请求的功能。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "目前的 Claude CLI 不支援要求的功能。"
+            "value": "目前的 Cursor CLI 不支援要求的功能。"
           }
         }
       }
@@ -3044,19 +3044,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI returned an oversized response and was stopped. Try refreshing or updating Claude CLI."
+            "value": "Cursor CLI returned an oversized response and was stopped. Try refreshing or updating Cursor CLI."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 返回的数据过大，已停止连接。请尝试刷新或更新 Claude CLI。"
+            "value": "Cursor CLI 返回的数据过大，已停止连接。请尝试刷新或更新 Cursor CLI。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 回傳的資料過大，已停止連線。請嘗試重新整理或更新 Claude CLI。"
+            "value": "Cursor CLI 回傳的資料過大，已停止連線。請嘗試重新整理或更新 Cursor CLI。"
           }
         }
       }
@@ -3067,19 +3067,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI could not complete the request. Try refreshing and check your Claude login if the problem persists."
+            "value": "Cursor CLI could not complete the request. Try refreshing and check your Cursor login if the problem persists."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 无法完成请求。请尝试刷新；若问题持续，请检查 Claude 登录状态。"
+            "value": "Cursor CLI 无法完成请求。请尝试刷新；若问题持续，请检查 Cursor 登录状态。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 無法完成要求。請嘗試重新整理；若問題持續，請檢查 Claude 登入狀態。"
+            "value": "Cursor CLI 無法完成要求。請嘗試重新整理；若問題持續，請檢查 Cursor 登入狀態。"
           }
         }
       }
@@ -3090,19 +3090,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not start Claude CLI. Check your Claude CLI installation."
+            "value": "Could not start Cursor CLI. Check your Cursor CLI installation."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法启动 Claude CLI。请检查 Claude CLI 安装。"
+            "value": "无法启动 Cursor CLI。请检查 Cursor CLI 安装。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法啟動 Claude CLI。請檢查 Claude CLI 安裝。"
+            "value": "無法啟動 Cursor CLI。請檢查 Cursor CLI 安裝。"
           }
         }
       }
@@ -3113,19 +3113,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Could not start Claude CLI: %@"
+            "value": "Could not start Cursor CLI: %@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法启动 Claude CLI：%@"
+            "value": "无法启动 Cursor CLI：%@"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法啟動 Claude CLI：%@"
+            "value": "無法啟動 Cursor CLI：%@"
           }
         }
       }
@@ -3136,19 +3136,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI stopped."
+            "value": "Cursor CLI stopped."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 已停止。"
+            "value": "Cursor CLI 已停止。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 已停止。"
+            "value": "Cursor CLI 已停止。"
           }
         }
       }
@@ -3159,19 +3159,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI stopped unexpectedly (exit code %d)."
+            "value": "Cursor CLI stopped unexpectedly (exit code %d)."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 意外停止（退出码 %d）。"
+            "value": "Cursor CLI 意外停止（退出码 %d）。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 意外停止（結束代碼 %d）。"
+            "value": "Cursor CLI 意外停止（結束代碼 %d）。"
           }
         }
       }
@@ -3200,24 +3200,24 @@
       }
     },
     "error.codex_not_found": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI was not found. Install Claude and sign in from Terminal first."
+            "value": "Cursor CLI was not found. Install Cursor CLI and run agent login in Terminal."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "找不到 Claude CLI。请先安装 Claude，并在终端中完成登录。"
+            "value": "找不到 Cursor CLI。请先安装 Cursor CLI，并在终端运行 agent login。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "找不到 Claude CLI。請先安裝 Claude，並在終端機中完成登入。"
+            "value": "找不到 Cursor CLI。請先安裝 Cursor CLI，並在終端機執行 agent login。"
           }
         }
       }
@@ -3228,19 +3228,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to communicate with Claude."
+            "value": "Unable to communicate with Cursor."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法与 Claude 通信。"
+            "value": "无法与 Cursor 通信。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法與 Claude 通訊。"
+            "value": "無法與 Cursor 通訊。"
           }
         }
       }
@@ -3251,19 +3251,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unable to communicate with Claude: %@"
+            "value": "Unable to communicate with Cursor: %@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "无法与 Claude 通信：%@"
+            "value": "无法与 Cursor 通信：%@"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "無法與 Claude 通訊：%@"
+            "value": "無法與 Cursor 通訊：%@"
           }
         }
       }
@@ -3292,24 +3292,24 @@
       }
     },
     "error.node_runtime_not_found": {
-      "extractionState": "stale",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI requires Node.js, but Node.js could not be found. Install Node.js or use the standalone Claude CLI."
+            "value": "Cursor CLI could not find its runtime. Reinstall Cursor CLI and try again."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 需要 Node.js，但未找到 Node.js。请安装 Node.js，或改用 Claude 独立版。"
+            "value": "Cursor CLI 找不到运行环境。请重新安装 Cursor CLI 后重试。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 需要 Node.js，但找不到 Node.js。請安裝 Node.js，或改用 Claude 獨立版。"
+            "value": "Cursor CLI 找不到執行環境。請重新安裝 Cursor CLI 後重試。"
           }
         }
       }
@@ -3319,19 +3319,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI is not signed in. Run claude auth login in Terminal."
+            "value": "Cursor CLI is not signed in. Run agent login in Terminal."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 尚未登录。请在终端运行 claude auth login。"
+            "value": "Cursor CLI 尚未登录。请在终端运行 agent login。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 尚未登入。請在終端機執行 claude auth login。"
+            "value": "Cursor CLI 尚未登入。請在終端機執行 agent login。"
           }
         }
       }
@@ -3365,19 +3365,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude returned an unknown error."
+            "value": "Cursor returned an unknown error."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 返回了未知错误。"
+            "value": "Cursor 返回了未知错误。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 回傳了未知錯誤。"
+            "value": "Cursor 回傳了未知錯誤。"
           }
         }
       }
@@ -3664,19 +3664,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter records changes and a 15-minute anchor while it is running. Check back after more refreshes."
+            "value": "CursorMeter records changes and a 15-minute anchor while it is running. Check back after more refreshes."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 会在运行期间记录额度变化和每 15 分钟的锚点。刷新几次后再回来查看。"
+            "value": "CursorMeter 会在运行期间记录额度变化和每 15 分钟的锚点。刷新几次后再回来查看。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 會在執行期間記錄額度變化和每 15 分鐘的錨點。重新整理幾次後再回來檢視。"
+            "value": "CursorMeter 會在執行期間記錄額度變化和每 15 分鐘的錨點。重新整理幾次後再回來檢視。"
           }
         }
       }
@@ -4078,19 +4078,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current 7-day quota cycle"
+            "value": "Recorded quota observations"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "当前 7 天额度周期"
+            "value": "已记录的额度观测"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "目前 7 天額度週期"
+            "value": "已記錄的額度觀測"
           }
         }
       }
@@ -4216,19 +4216,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current cycle"
+            "value": "Recent observations"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "当前周期"
+            "value": "近期观测"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "目前週期"
+            "value": "近期觀測"
           }
         }
       }
@@ -5085,23 +5085,24 @@
       }
     },
     "history.tokens.unavailable_help": {
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI /usage does not provide daily token activity. Quota history remains available."
+            "value": "Daily token activity is not available from this Cursor CLI source. Recorded quota history remains available."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 的 /usage 不提供每日 Token 活动，额度历史仍然可用。"
+            "value": "当前 Cursor CLI 数据源未提供每日 Token 活动，已记录的额度历史仍然可用。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 的 /usage 不提供每日 Token 活動，額度歷史仍然可用。"
+            "value": "目前 Cursor CLI 資料來源未提供每日 Token 活動，已記錄的額度歷史仍然可用。"
           }
         }
       }
@@ -5135,19 +5136,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reading Claude quota…"
+            "value": "Reading Cursor quota…"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在读取 Claude 额度…"
+            "value": "正在读取 Cursor 额度…"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在讀取 Claude 額度…"
+            "value": "正在讀取 Cursor 額度…"
           }
         }
       }
@@ -5158,19 +5159,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude"
+            "value": "Cursor"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude"
+            "value": "Cursor"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude"
+            "value": "Cursor"
           }
         }
       }
@@ -5273,19 +5274,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude quota is low"
+            "value": "Cursor quota is low"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 剩余额度较低"
+            "value": "Cursor 剩余额度较低"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 剩餘額度偏低"
+            "value": "Cursor 剩餘額度偏低"
           }
         }
       }
@@ -5319,19 +5320,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude usage is above pace"
+            "value": "Cursor usage is above pace"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 消耗速度偏快"
+            "value": "Cursor 消耗速度偏快"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 消耗速度偏快"
+            "value": "Cursor 消耗速度偏快"
           }
         }
       }
@@ -6147,19 +6148,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Notifications are disabled for ClaudeMeter. Enable them in System Settings."
+            "value": "Notifications are disabled for CursorMeter. Enable them in System Settings."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 的通知权限已关闭，请前往系统设置开启。"
+            "value": "CursorMeter 的通知权限已关闭，请前往系统设置开启。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 的通知權限已關閉，請前往系統設定開啟。"
+            "value": "CursorMeter 的通知權限已關閉，請前往系統設定開啟。"
           }
         }
       }
@@ -6814,19 +6815,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Local Claude CLI"
+            "value": "Local Cursor CLI"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "本机 Claude CLI"
+            "value": "本机 Cursor CLI"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "本機 Claude CLI"
+            "value": "本機 Cursor CLI"
           }
         }
       }
@@ -6906,19 +6907,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter %@ is available"
+            "value": "CursorMeter %@ is available"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter %@ 可更新"
+            "value": "CursorMeter %@ 可更新"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter %@ 可更新"
+            "value": "CursorMeter %@ 可更新"
           }
         }
       }
@@ -7136,19 +7137,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter is up to date."
+            "value": "CursorMeter is up to date."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 已是最新版本。"
+            "value": "CursorMeter 已是最新版本。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 已是最新版本。"
+            "value": "CursorMeter 已是最新版本。"
           }
         }
       }
@@ -7242,23 +7243,24 @@
       }
     },
     "settings.push.description": {
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Send a reminder when a selected quota window is replenished. Channels are off by default. ClaudeMeter must be running and online. Only the window name and observed remaining quota are sent; credentials stay in this Mac’s Keychain."
+            "value": "Send a reminder when an observed quota window is replenished and an exact reset time is available. Channels are off by default. CursorMeter must be running and online. Only the window name and observed remaining quota are sent; credentials stay in this Mac’s Keychain. The current CLI only supplies a reset date, so quota-reset pushes are unavailable."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "选定额度窗口恢复时发送提醒。所有渠道默认关闭，需要 ClaudeMeter 运行且联网。仅发送窗口名称与观测到的剩余额度；密钥保存在此 Mac 的钥匙串中。"
+            "value": "观测到额度窗口恢复且有明确重置时间时发送提醒。所有渠道默认关闭，需要 CursorMeter 运行且联网。仅发送窗口名称与观测到的剩余额度；密钥保存在此 Mac 的钥匙串中。 当前 CLI 仅提供重置日期，因此暂不触发额度恢复推送。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "選定額度視窗恢復時傳送提醒。所有管道預設關閉，需要 ClaudeMeter 執行且連線。僅傳送視窗名稱與觀測到的剩餘額度；金鑰儲存在此 Mac 的鑰匙圈中。"
+            "value": "觀測到額度視窗恢復且有明確重設時間時傳送提醒。所有管道預設關閉，需要 CursorMeter 執行且連線。僅傳送視窗名稱和觀測到的剩餘額度；金鑰儲存在此 Mac 的鑰匙圈中。 目前 CLI 僅提供重置日期，因此暫不觸發額度恢復推送。"
           }
         }
       }
@@ -7615,50 +7617,6 @@
         }
       }
     },
-    "settings.push.five_hour": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "5-Hour Quota Reset"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "五小时额度刷新推送"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "五小時額度重新整理推播"
-          }
-        }
-      }
-    },
-    "settings.push.weekly": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Weekly Quota Reset"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "周额度刷新推送"
-          }
-        },
-        "zh-Hant": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "週額度重新整理推播"
-          }
-        }
-      }
-    },
     "settings.push.bark": {
       "localizations": {
         "en": {
@@ -7906,19 +7864,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter Test"
+            "value": "CursorMeter Test"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 测试推送"
+            "value": "CursorMeter 测试推送"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "ClaudeMeter 測試推播"
+            "value": "CursorMeter 測試推播"
           }
         }
       }
@@ -7945,121 +7903,124 @@
         }
       }
     },
-    "ClaudeMeter": {
+    "CursorMeter": {
       "comment": "The name of the app.",
       "isCommentAutoGenerated": true
     },
-    "error.claude_setup_required": {
+    "error.cursor_setup_required": {
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Follow the detailed tutorial in the project README to sign in to Claude CLI, complete first-time setup and folder trust, then refresh here."
+            "value": "Run agent login in Terminal. Then open ~/Library/Application Support/CursorMeter/CLI, run agent, complete setup and folder trust, and enter /usage. Return here and refresh."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "请按照项目 README 中的详细教程，完成 Claude CLI 登录、首次设置和目录信任，然后返回刷新。"
+            "value": "请在终端运行 agent login，然后进入 ~/Library/Application Support/CursorMeter/CLI，运行 agent，完成设置与目录信任后输入 /usage，再返回刷新。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "請依照專案 README 中的詳細教學，完成 Claude CLI 登入、首次設定和資料夾信任，然後返回重新整理。"
+            "value": "請在終端機執行 agent login，接著進入 ~/Library/Application Support/CursorMeter/CLI，執行 agent，完成設定與資料夾信任後輸入 /usage，再返回重新整理。"
           }
         }
       }
     },
-    "error.claude_subscription_required": {
+    "error.cursor_subscription_required": {
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI usage requires a Claude subscription login. Run claude auth login."
+            "value": "Cursor CLI did not provide subscription usage. Run agent login, then check /usage in agent."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 用量查询需要登录 Claude 订阅账户。请运行 claude auth login。"
+            "value": "Cursor CLI 未提供订阅用量。请运行 agent login，然后在 agent 中检查 /usage。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 用量查詢需要登入 Claude 訂閱帳戶。請執行 claude auth login。"
+            "value": "Cursor CLI 未提供訂閱用量。請執行 agent login，接著在 agent 中檢查 /usage。"
           }
         }
       }
     },
-    "error.claude_usage_unrecognized": {
+    "error.cursor_usage_unrecognized": {
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI did not return a complete usage panel. ClaudeMeter will retry automatically. If this persists, check /usage in Claude Code."
+            "value": "Cursor CLI did not return a complete usage panel. CursorMeter will retry automatically. Run agent in ~/Library/Application Support/CursorMeter/CLI and check /usage if this persists."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 未返回完整用量面板，ClaudeMeter 将自动重试。若持续失败，请在 Claude Code 中检查 /usage。"
+            "value": "Cursor CLI 未返回完整用量面板，CursorMeter 将自动重试。若持续失败，请在 ~/Library/Application Support/CursorMeter/CLI 中运行 agent 并检查 /usage。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 未回傳完整用量面板，ClaudeMeter 將自動重試。若持續失敗，請在 Claude Code 中檢查 /usage。"
+            "value": "Cursor CLI 未回傳完整用量面板，CursorMeter 將自動重試。若持續失敗，請在 ~/Library/Application Support/CursorMeter/CLI 中執行 agent 並檢查 /usage。"
           }
         }
       }
     },
-    "error.claude_usage_cached": {
+    "error.cursor_usage_cached": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI returned cached usage because its latest request failed. Please wait for automatic retry."
+            "value": "Cursor CLI returned cached usage because its latest request failed. Please wait for automatic retry."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 本次查询失败，仅返回缓存用量。请等待自动重试。"
+            "value": "Cursor CLI 本次查询失败，仅返回缓存用量。请等待自动重试。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude CLI 本次查詢失敗，僅回傳快取用量。請等待自動重試。"
+            "value": "Cursor CLI 本次查詢失敗，僅回傳快取用量。請等待自動重試。"
           }
         }
       }
     },
-    "error.claude_usage_rate_limited": {
+    "error.cursor_usage_rate_limited": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude has temporarily rate-limited usage queries. Please wait for automatic retry."
+            "value": "Cursor has temporarily rate-limited usage queries. Please wait for automatic retry."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 暂时限制了用量查询频率。请等待自动重试。"
+            "value": "Cursor 暂时限制了用量查询频率。请等待自动重试。"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "Claude 暫時限制了用量查詢頻率。請等待自動重試。"
+            "value": "Cursor 暫時限制了用量查詢頻率。請等待自動重試。"
           }
         }
       }
     },
-    "error.claude_retry_at": {
+    "error.cursor_retry_at": {
       "localizations": {
         "en": {
           "stringUnit": {
@@ -8099,6 +8060,258 @@
           "stringUnit": {
             "state": "translated",
             "value": "更新由本專案的 GitHub Releases 提供。Sparkle 驗證更新簽章後安裝並重新啟動應用程式。"
+          }
+        }
+      }
+    },
+    "settings.push.quota_reset": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quota Reset Alerts"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "额度恢复提醒"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "額度恢復提醒"
+          }
+        }
+      }
+    },
+    "usage.on_demand": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-Demand Usage"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按需用量"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "按需用量"
+          }
+        }
+      }
+    },
+    "error.cursor_not_found": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI was not found. Install Cursor CLI and run agent login in Terminal."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到 Cursor CLI。请先安装 Cursor CLI，并在终端运行 agent login。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "找不到 Cursor CLI。請先安裝 Cursor CLI，並在終端機執行 agent login。"
+          }
+        }
+      }
+    },
+    "error.cursor_not_logged_in": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI is not signed in. Run agent login in Terminal."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI 尚未登录。请在终端运行 agent login。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI 尚未登入。請在終端機執行 agent login。"
+          }
+        }
+      }
+    },
+    "error.cursor_request_timeout": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The quota request timed out."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "额度请求超时。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "額度請求逾時。"
+          }
+        }
+      }
+    },
+    "error.cursor_communication": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unable to communicate with Cursor."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无法与 Cursor 通信。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無法與 Cursor 通訊。"
+          }
+        }
+      }
+    },
+    "error.cursor_output_too_large": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI returned an oversized response and was stopped. Try refreshing or updating Cursor CLI."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI 返回的数据过大，已停止连接。请尝试刷新或更新 Cursor CLI。"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cursor CLI 回傳的資料過大，已停止連線。請嘗試重新整理或更新 Cursor CLI。"
+          }
+        }
+      }
+    },
+    "quota.cursor_included": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Included"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "套餐额度"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "方案額度"
+          }
+        }
+      }
+    },
+    "quota.cursor_auto": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto"
+          }
+        }
+      }
+    },
+    "quota.cursor_api": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API"
+          }
+        }
+      }
+    },
+    "usage.spend": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spend · current cycle / previous period"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "费用 · 当前周期 / 上一周期"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "費用 · 目前週期 / 上一週期"
           }
         }
       }

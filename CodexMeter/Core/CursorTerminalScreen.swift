@@ -1,7 +1,7 @@
 import Foundation
 
-/// Reconstructs the bounded screen-reader panel, including incremental erases.
-nonisolated enum ClaudeTerminalScreen {
+/// Reconstructs the bounded interactive terminal panel, including incremental erases.
+nonisolated enum CursorTerminalScreen {
     static func render(_ text: String) -> String? {
         let input = Array(text)
         let rowLimit = 2_048, columnLimit = 1_024
@@ -48,7 +48,7 @@ nonisolated enum ClaudeTerminalScreen {
                     // Rendition, visibility, paste and synchronization modes do not move text.
                     if final == "m" { continue }
                     if final == "c" || (final == "q" && parameters == ">0")
-                        || (final == "u" && ["?", "<"].contains(parameters)) { continue }
+                        || (final == "u" && ["?", "<", ">1"].contains(parameters)) { continue }
                     if final == "h" || final == "l" {
                         guard ["?25", "?2004", "?2026", "?2031", "?1000", "?1002", "?1003", "?1004", "?1006"].contains(parameters) else { return nil }
                         continue
@@ -128,7 +128,7 @@ nonisolated enum ClaudeTerminalScreen {
     }
 
     private static func cellWidth(_ character: Character) -> Int {
-        // ponytail: the English screen-reader panel uses narrow text and block bars;
+        // ponytail: the English usage panel uses narrow text and block bars;
         // account for common wide startup glyphs without a terminal dependency.
         character.unicodeScalars.contains {
             let value = $0.value

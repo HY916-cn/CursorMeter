@@ -2,10 +2,13 @@ import AppKit
 import Combine
 import Foundation
 
-/// Exposes Claude CLI subscription quota while the official CLI owns authentication.
+/// Exposes Cursor CLI subscription quota while the official CLI owns authentication.
 final class CodexUsageService: ObservableObject {
     @Published private(set) var windows: [CodexUsageWindow] = []
     @Published private(set) var planType: String?
+    @Published private(set) var usageResetDescription: String?
+    @Published private(set) var onDemandUsageDescription: String?
+    @Published private(set) var spendUsageDescription: String?
     @Published private(set) var isLoading = false
     @Published private(set) var isRefreshInFlight = false
     @Published private(set) var isStale = false
@@ -20,7 +23,7 @@ final class CodexUsageService: ObservableObject {
     private let notificationManager: NotificationManager
     let pushNotificationService: PushNotificationService
     private let history: UsageHistoryModel
-    private var client: ClaudeCLIClient?
+    private var client: CursorCLIClient?
     private var refreshTimer: Timer?
     private var terminationObserver: NSObjectProtocol?
     private var wakeObserver: NSObjectProtocol?
@@ -28,7 +31,7 @@ final class CodexUsageService: ObservableObject {
     private var lastHistorySnapshot: [CodexUsageWindow]?
     private var lastHistoryAccountKey: String?
     private var lastHistoryRecordAt: Date?
-    private var refreshSchedule = ClaudeRefreshSchedule()
+    private var refreshSchedule = CursorRefreshSchedule()
     private(set) var historyAccountKey: String?
 
     init(settings: AppSettings, history: UsageHistoryModel,
@@ -77,10 +80,10 @@ final class CodexUsageService: ObservableObject {
         refreshTimer?.invalidate()
         refreshTimer = nil
         isRefreshInFlight = true
-        isLoading = windows.isEmpty
+        isLoading = lastUpdated == nil
         errorMessage = nil
         refreshSchedule.started(at: now)
-        let client = ClaudeCLIClient()
+        let client = CursorCLIClient()
         self.client = client
         DispatchQueue.global(qos: .utility).async { [weak self] in
             let result = Result { try client.fetch { account in
@@ -95,13 +98,13 @@ final class CodexUsageService: ObservableObject {
                 switch result {
                 case .success(let parsed): self.applyWindows(parsed)
                 case .failure(let error):
-                    self.markFailure(error as? ClaudeCLIError ?? .communication)
+                    self.markFailure(error as? CursorCLIError ?? .communication)
                 }
             }
         }
     }
 
-    func refreshIfNeeded(maxAge: TimeInterval = ClaudeRefreshSchedule.foregroundInterval) {
+    func refreshIfNeeded(maxAge: TimeInterval = CursorRefreshSchedule.foregroundInterval) {
         guard refreshSchedule.lastAttempt.map({ Date().timeIntervalSince($0) >= maxAge }) ?? true else { return }
         performRefresh(manual: false)
     }
@@ -163,13 +166,16 @@ final class CodexUsageService: ObservableObject {
         refreshTimer = timer
     }
 
-    private func applyAccount(_ account: ClaudeAuthStatus) {
+    private func applyAccount(_ account: CursorAuthStatus) {
         let identity = account.loggedIn && account.historyIdentity != nil ? HistoryAccountIdentity.make(
-            accountType: "claude", email: account.historyIdentity, salt: settings.historyIdentitySalt
+            accountType: "cursor", email: account.historyIdentity, salt: settings.historyIdentitySalt
         ) : nil
         if identity == nil || historyAccountKey != identity?.key {
             windows = []
             lastUpdated = nil
+            usageResetDescription = nil
+            onDemandUsageDescription = nil
+            spendUsageDescription = nil
             isStale = false
             tokenUsage = nil
             lastHistorySnapshot = nil
@@ -185,13 +191,13 @@ final class CodexUsageService: ObservableObject {
                 history.deactivateAccount()
             }
         }
-        planType = account.loggedIn ? (account.subscriptionType ?? account.authMethod ?? "Claude") : nil
+        planType = account.loggedIn ? (account.subscriptionType ?? "Cursor") : nil
     }
 
     private func restoreLastKnownUsage(accountKey: String) {
         Task { [weak self] in
             guard let self,
-                  let snapshot = await self.history.latestClaudeUsage(accountKey: accountKey),
+                  let snapshot = await self.history.latestCursorUsage(accountKey: accountKey),
                   self.historyAccountKey == accountKey,
                   self.windows.isEmpty, self.lastUpdated == nil else { return }
             // A delayed disk read must never replace fresh CLI data or another account.
@@ -204,18 +210,18 @@ final class CodexUsageService: ObservableObject {
 
     private func localizedWindows(_ parsed: [CodexUsageWindow]) -> [CodexUsageWindow] {
         parsed.map { window in
-            let name: String
-            if window.id == "claude-primary" { name = L10n.string("duration.five_hours") }
-            else if window.id == "claude-secondary" { name = L10n.string("duration.weekly") }
-            else { name = window.name }
-            return CodexUsageWindow(id: window.id, name: name, usedPercent: window.usedPercent,
-                windowDurationMins: window.windowDurationMins, resetsAt: window.resetsAt)
+            let key = ["cursor-included": "quota.cursor_included", "cursor-auto": "quota.cursor_auto", "cursor-api": "quota.cursor_api"][window.id]
+            return CodexUsageWindow(id: window.id, name: key.map { L10n.string($0) } ?? window.name,
+                usedPercent: window.usedPercent, windowDurationMins: window.windowDurationMins, resetsAt: window.resetsAt)
         }
     }
 
-    private func applyWindows(_ parsed: [CodexUsageWindow]) {
-        NSLog("ClaudeMeter quota refresh succeeded: %d windows", parsed.count)
-        let parsed = localizedWindows(parsed)
+    private func applyWindows(_ reading: CursorUsageReading) {
+        NSLog("CursorMeter quota refresh succeeded: %d windows", reading.windows.count)
+        let parsed = localizedWindows(reading.windows)
+        usageResetDescription = reading.resetDescription
+        onDemandUsageDescription = reading.onDemandDescription
+        spendUsageDescription = reading.spendDescription
         let updatedAt = Date()
         windows = parsed
         isLoading = false
@@ -267,15 +273,15 @@ final class CodexUsageService: ObservableObject {
         }
     }
 
-    private func markFailure(_ error: ClaudeCLIError) {
-        NSLog("ClaudeMeter quota refresh failed: %@", String(describing: error))
+    private func markFailure(_ error: CursorCLIError) {
+        NSLog("CursorMeter quota refresh failed: %@", String(describing: error))
         refreshSchedule.failed(at: Date(), usageUnavailable: error == .usageCached || error == .rateLimited)
         isLoading = false
         isRefreshInFlight = false
-        isStale = !windows.isEmpty
+        isStale = lastUpdated != nil
         let message = L10n.string(error.localizationKey)
         errorMessage = refreshSchedule.retryAfter.map {
-            message + " " + L10n.format("error.claude_retry_at", L10n.formattedTime($0))
+            message + " " + L10n.format("error.cursor_retry_at", L10n.formattedTime($0))
         } ?? message
         installRefreshTimer()
     }

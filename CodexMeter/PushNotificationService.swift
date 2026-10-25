@@ -19,19 +19,17 @@ final class PushNotificationService: ObservableObject {
         let generation: UUID
         let request: URLRequest
         let isTest: Bool
-        let duration: Int?
         let completion: ((Bool, String?) -> Void)?
         var attempt = 0
         var task: URLSessionDataTask?
         var retry: DispatchWorkItem?
         init(channel: PushChannel, configuration: PushChannelConfiguration, generation: UUID,
-             request: URLRequest, isTest: Bool, duration: Int?, completion: ((Bool, String?) -> Void)?) {
+             request: URLRequest, isTest: Bool, completion: ((Bool, String?) -> Void)?) {
             self.channel = channel
             self.configuration = configuration
             self.generation = generation
             self.request = request
             self.isTest = isTest
-            self.duration = duration
             self.completion = completion
         }
     }
@@ -50,21 +48,16 @@ final class PushNotificationService: ObservableObject {
     }
 
     func evaluate(windows: [CodexUsageWindow]) {
-        for window in resetTracker.evaluate(windows: windows) {
-            let supported: Bool
-            switch window.windowDurationMins {
-            case 300: supported = settings.pushFiveHourResetEnabled
-            case 10080: supported = settings.pushWeeklyResetEnabled
-            default: supported = false
-            }
-            guard supported else { continue }
+        let timedWindows = windows.filter { $0.resetsAt != nil }
+        for window in resetTracker.evaluate(windows: timedWindows) {
+            guard settings.pushQuotaResetEnabled else { continue }
             let title = L10n.string("push.reset.title")
             let body = L10n.format("push.reset.body_format", window.name, window.remainingPercent)
             let eventID = "\(window.historyID):\(window.resetsAt?.timeIntervalSince1970 ?? 0):\(window.remainingPercent)"
             for channel in PushChannel.allCases where isEnabled(channel) {
                 guard ledger.claim(eventID: eventID, channel: channel) else { continue }
                 send(channel: channel, title: title, body: body, isTest: false,
-                     duration: window.windowDurationMins, completion: nil)
+                     completion: nil)
             }
         }
     }
@@ -83,10 +76,10 @@ final class PushNotificationService: ObservableObject {
         // A repeated test replaces only the previous test, never a real reset notification.
         for job in Array(jobs.values) where job.channel == channel && job.isTest { cancel(job) }
         send(channel: channel, title: L10n.string("settings.push.test_title"),
-             body: L10n.string("settings.push.test_body"), isTest: true, duration: nil, completion: completion)
+             body: L10n.string("settings.push.test_body"), isTest: true, completion: completion)
     }
 
-    private func send(channel: PushChannel, title: String, body: String, isTest: Bool, duration: Int?,
+    private func send(channel: PushChannel, title: String, body: String, isTest: Bool,
                       completion: ((Bool, String?) -> Void)?) {
         let config = configuration(channel)
         do {
@@ -97,7 +90,7 @@ final class PushNotificationService: ObservableObject {
                 return
             }
             let job = DeliveryJob(channel: channel, configuration: config, generation: ledger.generation,
-                                  request: request, isTest: isTest, duration: duration, completion: completion)
+                                  request: request, isTest: isTest, completion: completion)
             jobs[job.id] = job
             perform(job)
         } catch {
@@ -142,16 +135,8 @@ final class PushNotificationService: ObservableObject {
 
     private func isCurrent(_ job: DeliveryJob) -> Bool {
         jobs[job.id] === job && ledger.accepts(job.generation) &&
-            (job.isTest || (isEnabled(job.channel) && isWindowEnabled(job.duration))) &&
+            (job.isTest || (isEnabled(job.channel) && settings.pushQuotaResetEnabled)) &&
             job.configuration == configuration(job.channel)
-    }
-
-    private func isWindowEnabled(_ duration: Int?) -> Bool {
-        switch duration {
-        case 300: return settings.pushFiveHourResetEnabled
-        case 10080: return settings.pushWeeklyResetEnabled
-        default: return false
-        }
     }
 
     private func cancelObsoleteJobs() {

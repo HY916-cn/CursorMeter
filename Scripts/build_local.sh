@@ -4,7 +4,7 @@ set -euo pipefail
 # Build the native app with the macOS Command Line Tools, including localized resources.
 TASK_PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 TASK_BUILD_DIR="$TASK_PROJECT_DIR/.build/local"
-TASK_APP="$TASK_PROJECT_DIR/dist/ClaudeMeter.app"
+TASK_APP="$TASK_PROJECT_DIR/dist/CursorMeter.app"
 TASK_SPARKLE_DIR="$(bash "$TASK_PROJECT_DIR/Scripts/fetch_sparkle.sh")"
 TASK_SDK="${SDKROOT:-$(xcrun --sdk macosx --show-sdk-path)}"
 # macOS 27's State macro needs an Xcode-only plugin; the macOS 26 SDK uses property wrappers.
@@ -22,8 +22,8 @@ xcrun swiftc -parse-as-library -swift-version 5 -default-isolation MainActor \
   -sdk "$TASK_SDK" -target "$(uname -m)-apple-macos13.0" -O -whole-module-optimization \
   -module-cache-path "$TASK_BUILD_DIR/module-cache" \
   "${TASK_SOURCES[@]}" -lsqlite3 -F "$TASK_SPARKLE_DIR" -framework Sparkle \
-  -Xlinker -rpath -Xlinker @executable_path/../Frameworks -o "$TASK_BUILD_DIR/ClaudeMeter"
-cp "$TASK_BUILD_DIR/ClaudeMeter" "$TASK_APP/Contents/MacOS/ClaudeMeter"
+  -Xlinker -rpath -Xlinker @executable_path/../Frameworks -o "$TASK_BUILD_DIR/CursorMeter"
+cp "$TASK_BUILD_DIR/CursorMeter" "$TASK_APP/Contents/MacOS/CursorMeter"
 mkdir -p "$TASK_APP/Contents/Frameworks"
 ditto "$TASK_SPARKLE_DIR/Sparkle.framework" "$TASK_APP/Contents/Frameworks/Sparkle.framework"
 
@@ -47,10 +47,10 @@ def setting(name):
 info = plistlib.loads((root / 'Config/CodexMeter-Info.plist').read_bytes())
 info.update({
     'CFBundleDevelopmentRegion': 'en',
-    'CFBundleExecutable': 'ClaudeMeter',
+    'CFBundleExecutable': 'CursorMeter',
     'CFBundleIdentifier': setting('PRODUCT_BUNDLE_IDENTIFIER'),
-    'CFBundleName': 'ClaudeMeter',
-    'CFBundleDisplayName': 'ClaudeMeter',
+    'CFBundleName': 'CursorMeter',
+    'CFBundleDisplayName': 'CursorMeter',
     'CFBundleShortVersionString': setting('MARKETING_VERSION'),
     'CFBundleVersion': setting('CURRENT_PROJECT_VERSION'),
     'LSMinimumSystemVersion': '13.0',

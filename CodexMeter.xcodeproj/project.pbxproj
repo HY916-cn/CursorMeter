@@ -11,7 +11,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6640C55B30227A8E001D6F08 /* ClaudeMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClaudeMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6640C55B30227A8E001D6F08 /* CursorMeter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CursorMeter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66E709DF30229D9400DAF9F7 /* AGENTS.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = AGENTS.md; sourceTree = "<group>"; };
 		66E709E130232C6000DAF9F7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -47,7 +47,7 @@
 		6640C55C30227A8E001D6F08 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6640C55B30227A8E001D6F08 /* ClaudeMeter.app */,
+				6640C55B30227A8E001D6F08 /* CursorMeter.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -68,12 +68,12 @@
 			fileSystemSynchronizedGroups = (
 				6640C55D30227A8E001D6F08 /* CodexMeter */,
 			);
-			name = ClaudeMeter;
+			name = CursorMeter;
 			packageProductDependencies = (
 				66A10003302F000100A10001 /* Sparkle */,
 			);
-			productName = ClaudeMeter;
-			productReference = 6640C55B30227A8E001D6F08 /* ClaudeMeter.app */;
+			productName = CursorMeter;
+			productReference = 6640C55B30227A8E001D6F08 /* CursorMeter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -257,7 +257,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
@@ -268,9 +268,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.huang.ClaudeMeter;
-				PRODUCT_NAME = ClaudeMeter;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huang.CursorMeter;
+				PRODUCT_NAME = CursorMeter;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -288,7 +288,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = NO;
 				ENABLE_PREVIEWS = YES;
@@ -299,9 +299,9 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.1.5;
-				PRODUCT_BUNDLE_IDENTIFIER = com.huang.ClaudeMeter;
-				PRODUCT_NAME = ClaudeMeter;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.huang.CursorMeter;
+				PRODUCT_NAME = CursorMeter;
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;

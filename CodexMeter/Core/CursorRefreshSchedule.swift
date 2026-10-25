@@ -1,6 +1,6 @@
 import Foundation
 
-nonisolated struct ClaudeRefreshSchedule {
+nonisolated struct CursorRefreshSchedule {
     static let foregroundInterval: TimeInterval = 10
     static let backgroundInterval: TimeInterval = 60
     static let manualMinimumInterval: TimeInterval = 10

@@ -50,7 +50,7 @@ struct MenuBarAppearance: Codable, Equatable {
     var percentageFontWeight = MenuBarFontWeightChoice.semibold
     var percentageVerticalOffset = 0.0
 
-    var captionText = "Claude"
+    var captionText = "Cursor"
     var showsCaption = true
     var captionFontSize = 6.5
     var captionFontWeight = MenuBarFontWeightChoice.medium

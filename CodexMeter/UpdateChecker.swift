@@ -26,7 +26,7 @@ final class UpdateChecker: NSObject, ObservableObject, SPUUpdaterDelegate {
     @Published private(set) var automaticallyInstallsUpdates = false
     @Published private(set) var isDeveloperPreview = false
 
-    private let releasesURL = URL(string: "https://github.com/HY916-cn/ClaudeMeter/releases")!
+    private let releasesURL = URL(string: "https://github.com/HY916-cn/CursorMeter/releases")!
     private var includesPrereleases: Bool
     private var stateBeforeDeveloperPreview: State?
     private var availabilityObservation: AnyCancellable?
@@ -92,7 +92,7 @@ final class UpdateChecker: NSObject, ObservableObject, SPUUpdaterDelegate {
         isDeveloperPreview = true
         state = .updateAvailable(AvailableUpdate(
             version: "9.9.9",
-            title: "ClaudeMeter 9.9.9 Preview",
+            title: "CursorMeter 9.9.9 Preview",
             releaseNotes: nil,
             releasePageURL: releasesURL.appending(path: "tag/v9.9.9"),
             publishedAt: nil

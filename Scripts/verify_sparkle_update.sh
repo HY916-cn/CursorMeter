@@ -22,8 +22,8 @@ archive, project, sparkle_bin = map(pathlib.Path, sys.argv[1:])
 feed = project / "appcast.xml"
 sign_update = sparkle_bin / "sign_update"
 namespace = "{http://www.andymatuschak.org/xml-namespaces/sparkle}"
-repository = "https://github.com/HY916-cn/ClaudeMeter"
-feed_url = "https://raw.githubusercontent.com/HY916-cn/ClaudeMeter/main/appcast.xml"
+repository = "https://github.com/HY916-cn/CursorMeter"
+feed_url = "https://raw.githubusercontent.com/HY916-cn/CursorMeter/main/appcast.xml"
 
 
 def require(condition, message):
@@ -32,7 +32,7 @@ def require(condition, message):
 
 
 def verify(path, signature=None):
-    command = [str(sign_update), "--verify", "--account", "com.huang.ClaudeMeter", str(path)]
+    command = [str(sign_update), "--verify", "--account", "com.huang.CursorMeter", str(path)]
     if signature is not None:
         command.append(signature)
     result = subprocess.run(command, capture_output=True, text=True)
@@ -47,16 +47,16 @@ try:
     verify(feed)
     config = plistlib.loads((project / "Config/CodexMeter-Info.plist").read_bytes())
     with zipfile.ZipFile(archive) as bundle:
-        info = plistlib.loads(bundle.read("ClaudeMeter.app/Contents/Info.plist"))
+        info = plistlib.loads(bundle.read("CursorMeter.app/Contents/Info.plist"))
         executable = info["CFBundleExecutable"]
         require("/" not in executable, "The bundle executable name is invalid.")
-        with bundle.open(f"ClaudeMeter.app/Contents/MacOS/{executable}") as binary:
+        with bundle.open(f"CursorMeter.app/Contents/MacOS/{executable}") as binary:
             header = binary.read(8)
         require(header == struct.pack("<II", 0xFEEDFACF, 0x0100000C),
                 "The release executable must be an arm64 Mach-O binary.")
-    require(info.get("CFBundleIdentifier") == "com.huang.ClaudeMeter", "Unexpected app bundle identifier.")
+    require(info.get("CFBundleIdentifier") == "com.huang.CursorMeter", "Unexpected app bundle identifier.")
     version, build = info["CFBundleShortVersionString"], info["CFBundleVersion"]
-    require(archive.name == f"ClaudeMeter-{version}-macOS-arm64.zip", "ZIP filename must match the app version and arm64 release naming.")
+    require(archive.name == f"CursorMeter-{version}-macOS-arm64.zip", "ZIP filename must match the app version and arm64 release naming.")
     require(info.get("LSMinimumSystemVersion") == "13.0", "The app minimum macOS version must be 13.0.")
     for settings in (config, info):
         require(settings.get("SUFeedURL") == feed_url, "The update feed must use this repository's raw GitHub appcast.")
@@ -81,7 +81,7 @@ try:
     signature = enclosure.get(namespace + "edSignature", "")
     require(len(base64.b64decode(signature, validate=True)) == 64, "The enclosure EdDSA signature is invalid.")
     verify(archive, signature)
-    print(f"Verified ClaudeMeter {version} (build {build}): signed feed, signed arm64 ZIP, and update metadata.")
+    print(f"Verified CursorMeter {version} (build {build}): signed feed, signed arm64 ZIP, and update metadata.")
 except (OSError, ValueError, KeyError, ET.ParseError, zipfile.BadZipFile, plistlib.InvalidFileException) as error:
     sys.exit(f"Update verification failed: {error}")
 PY

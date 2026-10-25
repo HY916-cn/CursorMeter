@@ -293,30 +293,19 @@ enum QuotaHistoryWindowIdentity {
     }
 }
 
-/// Picks the all-model Claude weekly bucket when the CLI returns multiple
-/// seven-day buckets. Other buckets remain available for explicit selection.
+/// Prefers the longest known quota window; unknown durations retain source order.
 enum QuotaWindowSelection {
-    static let standardWeeklyHistoryID = QuotaHistoryWindowIdentity.make(
-        sourceID: "claude",
-        durationMins: 7 * 24 * 60
-    )
-
     static func preferredDefault(from windows: [CodexUsageWindow]) -> CodexUsageWindow? {
-        windows.first(where: { $0.historyID == standardWeeklyHistoryID })
-            ?? windows.first(where: { $0.windowDurationMins == 7 * 24 * 60 })
-            ?? windows.max { ($0.windowDurationMins ?? 0) < ($1.windowDurationMins ?? 0) }
+        windows.max { ($0.windowDurationMins ?? 0) < ($1.windowDurationMins ?? 0) }
     }
 
     static func preferredDefault(from windows: [QuotaHistoryWindow]) -> QuotaHistoryWindow? {
-        windows.first(where: { $0.id == standardWeeklyHistoryID })
-            ?? windows.first(where: \.isWeekly)
-            ?? windows.max { ($0.windowDurationMins ?? 0) < ($1.windowDurationMins ?? 0) }
+        windows.max { ($0.windowDurationMins ?? 0) < ($1.windowDurationMins ?? 0) }
     }
 }
 
 extension CodexUsageWindow {
-    /// App Server's primary/secondary slots can swap when a new window appears.
-    /// History follows the quota bucket and duration instead of that slot position.
+    /// History follows the quota bucket and its observed duration.
     nonisolated var historyID: String {
         QuotaHistoryWindowIdentity.make(
             sourceID: id,
@@ -565,9 +554,11 @@ struct ObservedQuotaConsumption: Equatable, Sendable {
         for (index, cycle) in cycles.enumerated() {
             guard let firstSample = cycle.first else { continue }
             let isLatestCycle = index == cycles.indices.last
-            let cycleEnd = isLatestCycle && usesLiveWindowReset
-                ? (window.resetsAt ?? cycle.last?.resetsAt)
-                : cycle.last?.resetsAt
+            let cycleEnd: Date? = (window.windowDurationMins ?? 0) > 0
+                ? (isLatestCycle && usesLiveWindowReset
+                    ? (window.resetsAt ?? cycle.last?.resetsAt)
+                    : cycle.last?.resetsAt)
+                : nil
             let nextCycleStart = cycles.indices.contains(index + 1)
                 ? cycles[index + 1].first?.sampledAt
                 : nil
@@ -641,7 +632,7 @@ struct ObservedQuotaConsumption: Equatable, Sendable {
     }
 }
 
-/// A chart-ready quota series that keeps weekly reset cycles visually separate.
+/// A chart-ready quota series that keeps observed reset segments visually separate.
 struct QuotaHistorySeries: Equatable, Sendable {
     static let duration: TimeInterval = 7 * 24 * 60 * 60
 
@@ -669,7 +660,8 @@ struct QuotaHistorySeries: Equatable, Sendable {
         let ordered = samples
             .filter { $0.windowID == window.id }
             .sorted { $0.sampledAt < $1.sampledAt }
-        guard let cycleEnd = window.resetsAt ?? ordered.last?.resetsAt else {
+        guard let durationMinutes = window.windowDurationMins, durationMinutes > 0,
+              let cycleEnd = window.resetsAt ?? ordered.last?.resetsAt else {
             return makeCurrentCycleWithoutReset(
                 ordered: ordered,
                 window: window,
@@ -835,9 +827,11 @@ struct QuotaHistorySeries: Equatable, Sendable {
         for (index, logicalCycle) in logicalCycles.enumerated() {
             guard let firstSample = logicalCycle.first else { continue }
             let isLatestCycle = index == logicalCycles.indices.last
-            let cycleEnd = isLatestCycle && usesLiveWindowReset
-                ? (window.resetsAt ?? logicalCycle.last?.resetsAt)
-                : logicalCycle.last?.resetsAt
+            let cycleEnd: Date? = (window.windowDurationMins ?? 0) > 0
+                ? (isLatestCycle && usesLiveWindowReset
+                    ? (window.resetsAt ?? logicalCycle.last?.resetsAt)
+                    : logicalCycle.last?.resetsAt)
+                : nil
             // An unknown reset still renders its recorded samples, but without
             // a synthetic 100% start or an ideal-pace segment.
             let cycleStart = cycleEnd?.addingTimeInterval(-cycleDuration)

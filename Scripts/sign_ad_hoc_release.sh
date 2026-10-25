@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if (( $# != 1 )); then
-    echo "Usage: $0 <ClaudeMeter.app>" >&2
+    echo "Usage: $0 <CursorMeter.app>" >&2
     exit 64
 fi
 

@@ -20,8 +20,7 @@ struct NotificationsSettingsView: View {
                 }
             }
             Section(L10n.string("settings.push.title")) {
-                Toggle(L10n.string("settings.push.five_hour"), isOn: $settings.pushFiveHourResetEnabled)
-                Toggle(L10n.string("settings.push.weekly"), isOn: $settings.pushWeeklyResetEnabled)
+                Toggle(L10n.string("settings.push.quota_reset"), isOn: $settings.pushQuotaResetEnabled)
                 Text(L10n.string("settings.push.description"))
                     .font(.caption).foregroundStyle(.secondary)
                 if let error = settings.pushCredentialError {

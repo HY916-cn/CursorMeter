@@ -7,7 +7,7 @@ final class AppSettings {
     var notificationsEnabled = true
     var settingsDestination: Destination = .notifications
     var notificationThreshold = 20
-    let historyIdentitySalt = "claude-service-integration-fixture-salt"
+    let historyIdentitySalt = "cursor-service-integration-fixture-salt"
     var historyRetention: HistoryRetention = .forever
     func clearSettingsError() {}
     func showSettingsError(_ message: String, destination: Destination) {}
@@ -36,10 +36,10 @@ enum L10n {
 }
 
 /// This target excludes the real CLI client, so every refresh stays in the fixture.
-nonisolated final class ClaudeCLIClient: @unchecked Sendable {
+nonisolated final class CursorCLIClient: @unchecked Sendable {
     struct Fixture: Sendable {
-        let accounts: [ClaudeAuthStatus]
-        let result: Result<[CodexUsageWindow], ClaudeCLIError>
+        let accounts: [CursorAuthStatus]
+        let result: Result<[CodexUsageWindow], CursorCLIError>
     }
     private static let lock = NSLock()
     nonisolated(unsafe) private static var next: Fixture?
@@ -66,12 +66,13 @@ nonisolated final class ClaudeCLIClient: @unchecked Sendable {
         self.fixture = fixture
     }
 
-    func fetch(onAccount: (ClaudeAuthStatus) -> Void) throws -> [CodexUsageWindow] {
+    func fetch(onAccount: (CursorAuthStatus) -> Void) throws -> CursorUsageReading {
         Self.lock.lock()
         Self.calls += 1
         Self.lock.unlock()
         for account in fixture.accounts { onAccount(account) }
-        return try fixture.result.get()
+        let windows = try fixture.result.get()
+        return CursorUsageReading(windows: windows, resetDescription: "Resets Nov 1", onDemandDescription: windows.isEmpty ? nil : "$0 · No monthly limit", spendDescription: windows.isEmpty ? "$12 / $20" : nil)
     }
 
     func cancel() {}
@@ -96,19 +97,19 @@ struct Integration {
         check(condition(), message)
     }
 
-    static func account(_ email: String) throws -> ClaudeAuthStatus {
+    static func account(_ email: String) throws -> CursorAuthStatus {
         let data = try JSONSerialization.data(withJSONObject: [
-            "loggedIn": true, "authMethod": "claude.ai", "apiProvider": "firstParty",
-            "email": email, "orgId": "fixture-org", "subscriptionType": "pro"
+            "status": "authenticated", "isAuthenticated": true,
+            "userInfo": ["email": email, "teamId": 7], "subscriptionType": "pro"
         ])
-        return try JSONDecoder().decode(ClaudeAuthStatus.self, from: data)
+        return try JSONDecoder().decode(CursorAuthStatus.self, from: data)
     }
 
     static func windows(used: Int, sampledAt: Date) -> [CodexUsageWindow] {
-        [CodexUsageWindow(id: "claude-primary", name: "duration.five_hours", usedPercent: used,
-            windowDurationMins: 300, resetsAt: sampledAt.addingTimeInterval(18_000)),
-         CodexUsageWindow(id: "claude-secondary", name: "duration.weekly", usedPercent: used + 10,
-            windowDurationMins: 10_080, resetsAt: sampledAt.addingTimeInterval(604_800))]
+        ["included", "auto", "api"].enumerated().map { index, label in
+            CodexUsageWindow(id: "cursor-\(label)", name: "quota.cursor_\(label)", usedPercent: used + index,
+                             windowDurationMins: nil, resetsAt: nil)
+        }
     }
 
     static func main() {
@@ -126,16 +127,16 @@ struct Integration {
     }
 
     static func runChecks() async throws {
-        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("claude-service-\(UUID().uuidString)")
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent("cursor-service-\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let databaseURL = directory.appendingPathComponent("history.sqlite")
         let settings = AppSettings()
         let accountA = try account("restart-a@example.invalid")
         let accountB = try account("restart-b@example.invalid")
-        let keyA = HistoryAccountIdentity.make(accountType: "claude", email: accountA.historyIdentity,
+        let keyA = HistoryAccountIdentity.make(accountType: "cursor", email: accountA.historyIdentity,
             salt: settings.historyIdentitySalt).key
-        let keyB = HistoryAccountIdentity.make(accountType: "claude", email: accountB.historyIdentity,
+        let keyB = HistoryAccountIdentity.make(accountType: "cursor", email: accountB.historyIdentity,
             salt: settings.historyIdentitySalt).key
         let sampledAt = Date(timeIntervalSince1970: floor(Date().timeIntervalSince1970) - 600)
         let savedWindows = windows(used: 23, sampledAt: sampledAt)
@@ -147,30 +148,30 @@ struct Integration {
 
         // A new model/service represents a fresh app process over an existing database.
         do {
-            ClaudeCLIClient.configure(.init(accounts: [accountA], result: .failure(.usageCached)))
+            CursorCLIClient.configure(.init(accounts: [accountA], result: .failure(.usageCached)))
             let history = UsageHistoryModel(databaseURL: databaseURL)
             let notifications = NotificationManager()
             let push = PushNotificationService(settings: settings)
             let service = CodexUsageService(settings: settings, history: history,
                 notificationManager: notifications, pushNotificationService: push)
             try await until("Restart restores saved quota after cached CLI failure") {
-                service.windows.count == 2 && service.errorMessage != nil && !service.isRefreshInFlight
+                service.windows.count == 3 && service.errorMessage != nil && !service.isRefreshInFlight
             }
             check(service.windows == savedWindows, "Restored quota keeps IDs, percentages, durations and resets")
             check(service.lastUpdated == sampledAt, "Restore keeps the original successful sample timestamp")
             check(service.isStale && !service.isLoading, "Restored quota remains visibly stale without a loading state")
-            check(service.errorMessage?.contains("error.claude_usage_cached") == true,
+            check(service.errorMessage?.contains("error.cursor_usage_cached") == true,
                   "Restore preserves the current cache-fallback error")
             service.refresh()
             service.refreshIfNeeded(maxAge: 0)
             try await settle()
-            check(ClaudeCLIClient.fetchCount == 1, "Restart recovery and refresh clicks respect the failure cooldown")
+            check(CursorCLIClient.fetchCount == 1, "Restart recovery and refresh clicks respect the failure cooldown")
             // Wait beyond the normal foreground age so this exercises the failure
             // cooldown rather than the wake handler's fresh-sample guard.
-            try await Task.sleep(nanoseconds: UInt64((ClaudeRefreshSchedule.foregroundInterval + 0.2) * 1_000_000_000))
+            try await Task.sleep(nanoseconds: UInt64((CursorRefreshSchedule.foregroundInterval + 0.2) * 1_000_000_000))
             NSWorkspace.shared.notificationCenter.post(name: NSWorkspace.didWakeNotification, object: nil)
             try await settle()
-            check(ClaudeCLIClient.fetchCount == 1 && service.isStale,
+            check(CursorCLIClient.fetchCount == 1 && service.isStale,
                   "Wake preserves the failure cooldown after the normal refresh age")
             check(notifications.evaluations == 0 && push.evaluations == 0, "Restoration sends no quota notifications")
             let count = try await store.quotaSamples(since: .distantPast, accountKey: keyA).count
@@ -179,7 +180,7 @@ struct Integration {
 
         do {
             let freshWindows = windows(used: 37, sampledAt: sampledAt)
-            ClaudeCLIClient.configure(.init(accounts: [accountA], result: .success(freshWindows)))
+            CursorCLIClient.configure(.init(accounts: [accountA], result: .success(freshWindows)))
             let history = UsageHistoryModel(databaseURL: databaseURL)
             let notifications = NotificationManager()
             let push = PushNotificationService(settings: settings)
@@ -197,28 +198,28 @@ struct Integration {
             service.setPopoverVisible(true)
             NSWorkspace.shared.notificationCenter.post(name: NSWorkspace.didWakeNotification, object: nil)
             try await settle()
-            check(ClaudeCLIClient.fetchCount == 1, "Immediate wake does not duplicate a fresh quota request")
+            check(CursorCLIClient.fetchCount == 1, "Immediate wake does not duplicate a fresh quota request")
             let firstUpdated = service.lastUpdated!
             try await until("Visible popover automatically refreshes without a manual request",
-                            timeout: ClaudeRefreshSchedule.foregroundInterval + 5) {
-                ClaudeCLIClient.fetchCount == 2 && !service.isRefreshInFlight
+                            timeout: CursorRefreshSchedule.foregroundInterval + 5) {
+                CursorCLIClient.fetchCount == 2 && !service.isRefreshInFlight
                     && service.lastUpdated! > firstUpdated
             }
             check(service.windows == freshWindows && !service.isStale,
                   "Automatic refresh preserves valid quota and advances its observation time")
             service.setPopoverVisible(false)
             let automaticUpdated = service.lastUpdated!
-            try await Task.sleep(nanoseconds: UInt64((ClaudeRefreshSchedule.foregroundInterval + 0.2) * 1_000_000_000))
-            check(ClaudeCLIClient.fetchCount == 2, "Hidden popover uses the longer background interval")
+            try await Task.sleep(nanoseconds: UInt64((CursorRefreshSchedule.foregroundInterval + 0.2) * 1_000_000_000))
+            check(CursorCLIClient.fetchCount == 2, "Hidden popover uses the longer background interval")
             NSWorkspace.shared.notificationCenter.post(name: NSWorkspace.didWakeNotification, object: nil)
             try await until("Wake refreshes an aged sample before the background timer is due", timeout: 5) {
-                ClaudeCLIClient.fetchCount == 3 && !service.isRefreshInFlight
+                CursorCLIClient.fetchCount == 3 && !service.isRefreshInFlight
                     && service.lastUpdated! > automaticUpdated
             }
         }
 
         do {
-            ClaudeCLIClient.configure(.init(accounts: [accountA, accountB], result: .failure(.usageCached)))
+            CursorCLIClient.configure(.init(accounts: [accountA, accountB], result: .failure(.usageCached)))
             let history = UsageHistoryModel(databaseURL: databaseURL)
             let notifications = NotificationManager()
             let push = PushNotificationService(settings: settings)
@@ -235,6 +236,36 @@ struct Integration {
             let count = try await store.quotaSamples(since: .distantPast, accountKey: keyB).count
             check(count == 0, "Account switching does not copy history into the new account")
         }
-        print("Claude service integration checks passed: real SQLite restart recovery, stale state, timestamps, cooldown, automatic timer, wake handling, fresh response, account isolation.")
+        do {
+            CursorCLIClient.configure(.init(accounts: [accountA], result: .success([])))
+            let history = UsageHistoryModel(databaseURL: databaseURL)
+            let service = CodexUsageService(settings: settings, history: history)
+            try await until("Enterprise spending completes without quota percentages") {
+                service.lastUpdated != nil && !service.isStale && !service.isRefreshInFlight
+            }
+            check(service.windows.isEmpty && service.spendUsageDescription == "$12 / $20",
+                  "Enterprise spend is shown independently from percentages")
+            let observed = service.lastUpdated
+            CursorCLIClient.configure(.init(accounts: [accountA], result: .failure(.communication)))
+            service.refreshIfNeeded(maxAge: 0)
+            check(!service.isLoading, "Spending-only refresh retains the successful display")
+            try await until("Enterprise failure completes") { service.errorMessage != nil && !service.isRefreshInFlight }
+            check(service.isStale && service.spendUsageDescription == "$12 / $20" && service.lastUpdated == observed,
+                  "Failed enterprise refresh preserves spending and its original observation time")
+        }
+        do {
+            let unidentified = try JSONDecoder().decode(CursorAuthStatus.self,
+                from: Data(#"{"status":"authenticated","isAuthenticated":true}"#.utf8))
+            CursorCLIClient.configure(.init(accounts: [unidentified], result: .success(windows(used: 20, sampledAt: sampledAt))))
+            let history = UsageHistoryModel(databaseURL: databaseURL)
+            let notifications = NotificationManager()
+            let push = PushNotificationService(settings: settings)
+            let service = CodexUsageService(settings: settings, history: history,
+                notificationManager: notifications, pushNotificationService: push)
+            try await until("Unidentified account can display live percentages") { service.windows.count == 3 && !service.isRefreshInFlight }
+            check(service.historyAccountKey == nil && notifications.evaluations == 0 && push.evaluations == 0,
+                  "Incomplete identity disables history and alerts")
+        }
+        print("Cursor service integration checks passed: real SQLite restart recovery, stale state, timestamps, cooldown, automatic timer, wake handling, fresh response, account isolation.")
     }
 }

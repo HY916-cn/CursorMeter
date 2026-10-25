@@ -8,7 +8,7 @@ struct AboutView: View {
     var embedded = false
     @Environment(\.dismiss) private var dismiss
 
-    private let repositoryURL = URL(string: "https://github.com/HY916-cn/ClaudeMeter")!
+    private let repositoryURL = URL(string: "https://github.com/HY916-cn/CursorMeter")!
 
     var body: some View {
         VStack(spacing: 0) {
@@ -48,14 +48,14 @@ struct AboutView: View {
                     .resizable()
                     .frame(width: 64, height: 64)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text("ClaudeMeter").font(.title2.weight(.semibold))
+                    Text("CursorMeter").font(.title2.weight(.semibold))
                     Text(L10n.format(
                         "about.version_format",
                         updateChecker.installedVersion,
                         updateChecker.installedBuild
                     ))
                     .foregroundStyle(.secondary)
-                    Link(L10n.string("action.open_setup_readme"), destination: URL(string: "https://github.com/HY916-cn/ClaudeMeter#首次使用按顺序完成配置")!)
+                    Link(L10n.string("action.open_setup_readme"), destination: URL(string: "https://github.com/HY916-cn/CursorMeter#first-run")!)
                     Link(destination: repositoryURL) {
                         Label(L10n.string("about.github"), systemImage: "link")
                     }

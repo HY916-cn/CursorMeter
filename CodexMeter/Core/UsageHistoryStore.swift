@@ -63,7 +63,7 @@ actor UsageHistoryStore {
         let base = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
             ?? fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support")
         return base
-            .appendingPathComponent("ClaudeMeter", isDirectory: true)
+            .appendingPathComponent("CursorMeter", isDirectory: true)
             .appendingPathComponent("UsageHistory.sqlite")
     }
 
@@ -141,7 +141,7 @@ actor UsageHistoryStore {
         }
         let recoveryDirectory = databaseURL.deletingLastPathComponent().appendingPathComponent("Backups")
         try FileManager.default.createDirectory(at: recoveryDirectory, withIntermediateDirectories: true)
-        let recovery = recoveryDirectory.appendingPathComponent("Before-restore-\(UUID().uuidString).claudemeterbackup")
+        let recovery = recoveryDirectory.appendingPathComponent("Before-restore-\(UUID().uuidString).cursormeterbackup")
         let oldArchive = try exportBackup(identitySalt: identitySalt, appVersion: appVersion)
         try oldArchive.write(to: recovery, options: .atomic)
         let rollbackURL = directory.appendingPathComponent("rollback.sqlite")
@@ -238,7 +238,7 @@ actor UsageHistoryStore {
     }
 
     /// Recovers the last successful CLI observations after the app restarts.
-    func latestClaudeUsage(accountKey: String) throws -> ClaudeUsageSnapshot? {
+    func latestCursorUsage(accountKey: String) throws -> CursorUsageSnapshot? {
         try prepareDatabase()
         guard !accountKey.isEmpty else { return nil }
         let statement = try prepare("""
@@ -251,7 +251,8 @@ actor UsageHistoryStore {
                        ) AS position
                 FROM quota_samples
                 WHERE account_key = ? AND is_stale = 0 AND source = 'refresh'
-                  AND (window_id GLOB 'duration:*:claude' OR window_id GLOB 'duration:*:claude-*')
+                  AND (window_id = 'cursor' OR window_id GLOB 'cursor-*'
+                       OR window_id GLOB 'duration:*:cursor' OR window_id GLOB 'duration:*:cursor-*')
             )
             SELECT id, window_id, window_name, sampled_at, remaining_percent,
                    window_duration_mins, resets_at, starts_segment, is_anchor,
@@ -264,7 +265,7 @@ actor UsageHistoryStore {
         while true {
             switch sqlite3_step(statement) {
             case SQLITE_ROW: samples.append(try decodeQuotaSample(statement))
-            case SQLITE_DONE: return ClaudeUsageSnapshot.fromHistorySamples(samples)
+            case SQLITE_DONE: return CursorUsageSnapshot.fromHistorySamples(samples)
             default: throw currentError()
             }
         }

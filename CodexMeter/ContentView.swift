@@ -69,7 +69,7 @@ struct ContentView: View {
             service.setPopoverVisible(false)
         }
         .task(id: history.dataRevision) {
-            // Load the preferred weekly cycle whenever the popover appears or
+            // Load the selected quota history whenever the popover appears or
             // a successful refresh records a new local history sample.
             await history.load()
         }
@@ -111,14 +111,41 @@ struct ContentView: View {
 
             Divider()
 
-            if service.isLoading && service.windows.isEmpty {
+            if service.isLoading && service.lastUpdated == nil {
                 loadingView
             } else if let errorMessage = service.errorMessage,
-                      service.windows.isEmpty {
+                      service.lastUpdated == nil {
                 errorView(errorMessage)
             } else {
                 if let errorMessage = service.errorMessage {
                     inlineErrorView(errorMessage)
+                }
+
+                if let reset = service.usageResetDescription {
+                    Label(reset, systemImage: "calendar")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                if let spend = service.spendUsageDescription {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(L10n.string("usage.spend"))
+                            .font(.caption.weight(.semibold))
+                        Text(spend)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+                if let onDemand = service.onDemandUsageDescription {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(L10n.string("usage.on_demand"))
+                            .font(.caption.weight(.semibold))
+                        Text(onDemand)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
 
                 configurableContent
@@ -258,7 +285,7 @@ struct ContentView: View {
     }
 
     private var setupReadmeLink: some View {
-        Link(destination: URL(string: "https://github.com/HY916-cn/ClaudeMeter#首次使用按顺序完成配置")!) {
+        Link(destination: URL(string: "https://github.com/HY916-cn/CursorMeter#first-run")!) {
             Label(L10n.string("action.open_setup_readme"), systemImage: "book")
                 .font(.caption)
                 .fixedSize(horizontal: false, vertical: true)

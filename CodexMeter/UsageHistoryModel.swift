@@ -33,11 +33,11 @@ final class UsageHistoryModel: ObservableObject {
     }
 
     /// Read an account-scoped fallback without creating a fresh history sample.
-    func latestClaudeUsage(accountKey: String) async -> ClaudeUsageSnapshot? {
+    func latestCursorUsage(accountKey: String) async -> CursorUsageSnapshot? {
         guard let store, !isRestoring, !needsRestart, activeAccountKey == accountKey else { return nil }
         await accountPreparationTask?.value
         guard !isRestoring, !needsRestart, activeAccountKey == accountKey else { return nil }
-        return try? await store.latestClaudeUsage(accountKey: accountKey)
+        return try? await store.latestCursorUsage(accountKey: accountKey)
     }
 
     func recordQuota(
