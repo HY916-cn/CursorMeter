@@ -266,6 +266,38 @@ struct Integration {
             check(service.historyAccountKey == nil && notifications.evaluations == 0 && push.evaluations == 0,
                   "Incomplete identity disables history and alerts")
         }
+        do {
+            let freshWindows = windows(used: 20, sampledAt: sampledAt)
+            CursorCLIClient.configure(.init(accounts: [accountA], result: .success(freshWindows)))
+            let history = UsageHistoryModel(databaseURL: databaseURL)
+            let service = CodexUsageService(settings: settings, history: history)
+            try await until("Initial account plan is available") { service.planType == "pro" && !service.isRefreshInFlight }
+            var statusOnly = accountA
+            statusOnly.subscriptionType = nil
+            CursorCLIClient.configure(.init(accounts: [statusOnly], result: .success(freshWindows)))
+            service.refreshIfNeeded(maxAge: 0)
+            try await until("Same-account status refresh completes") { !service.isRefreshInFlight }
+            check(service.planType == "pro", "Intermediate status preserves the identified account's known plan")
+
+            var otherStatus = accountB
+            otherStatus.subscriptionType = nil
+            CursorCLIClient.configure(.init(accounts: [otherStatus], result: .success(freshWindows)))
+            service.refreshIfNeeded(maxAge: 0)
+            try await until("New account status refresh completes") { !service.isRefreshInFlight }
+            check(service.planType == "Cursor" && service.accountDescription == "Cursor",
+                  "Account change clears the old plan and shows Cursor once")
+
+            CursorCLIClient.configure(.init(accounts: [accountB], result: .success(freshWindows)))
+            service.refreshIfNeeded(maxAge: 0)
+            try await until("New account plan arrives") { service.planType == "pro" && !service.isRefreshInFlight }
+            let unidentified = try JSONDecoder().decode(CursorAuthStatus.self,
+                from: Data(#"{"status":"authenticated","isAuthenticated":true}"#.utf8))
+            CursorCLIClient.configure(.init(accounts: [unidentified], result: .success(freshWindows)))
+            service.refreshIfNeeded(maxAge: 0)
+            try await until("Unidentified account status refresh completes") { !service.isRefreshInFlight }
+            check(service.planType == "Cursor" && service.accountDescription == "Cursor",
+                  "Missing identity clears the prior account's plan")
+        }
         print("Cursor service integration checks passed: real SQLite restart recovery, stale state, timestamps, cooldown, automatic timer, wake handling, fresh response, account isolation.")
     }
 }

@@ -776,7 +776,9 @@ private struct UsageWindowRow: View {
 
                 Spacer()
 
-                paceLabel
+                if window.remainingTimePercent(at: now) != nil {
+                    paceLabel
+                }
             }
 
             MetricBar(
@@ -786,15 +788,17 @@ private struct UsageWindowRow: View {
                 symbol: "battery.75percent"
             )
 
-            MetricBar(
-                label: L10n.string("time.remaining"),
-                value: window.remainingTimePercent(at: now),
-                tint: appearance.timeColor.swiftUIColor(for: colorScheme),
-                symbol: "clock"
-            )
+            if let remainingTime = window.remainingTimePercent(at: now) {
+                MetricBar(
+                    label: L10n.string("time.remaining"),
+                    value: remainingTime,
+                    tint: appearance.timeColor.swiftUIColor(for: colorScheme),
+                    symbol: "clock"
+                )
+            }
 
-            HStack {
-                if let resetsAt = window.resetsAt {
+            if let resetsAt = window.resetsAt {
+                HStack {
                     Label(
                         L10n.format(
                             "quota.reset_remaining_format",
@@ -802,21 +806,15 @@ private struct UsageWindowRow: View {
                         ),
                         systemImage: "hourglass"
                     )
-                } else {
-                    Label(L10n.string("quota.reset_unavailable"), systemImage: "hourglass")
-                }
-
-                Spacer()
-
-                if let resetsAt = window.resetsAt {
+                    Spacer()
                     Text(L10n.format(
                         "quota.reset_format",
                         L10n.formattedDateTime(resetsAt)
                     ))
                 }
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
-            .font(.caption)
-            .foregroundStyle(.secondary)
         }
         .padding(.vertical, 4)
     }

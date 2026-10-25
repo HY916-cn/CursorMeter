@@ -33,19 +33,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Original CodexMeter project"
+            "value": "CursorMeter on GitHub"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "CodexMeter 原始项目"
+            "value": "CursorMeter GitHub 项目"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "CodexMeter 原始專案"
+            "value": "CursorMeter GitHub 專案"
           }
         }
       }

@@ -65,6 +65,7 @@ final class CodexUsageService: ObservableObject {
     }
     var accountDescription: String {
         guard let planType else { return L10n.string("account.checking") }
+        guard planType.caseInsensitiveCompare("Cursor") != .orderedSame else { return "Cursor" }
         return L10n.format("account.chatgpt_format", planType.capitalized)
     }
 
@@ -171,6 +172,7 @@ final class CodexUsageService: ObservableObject {
             accountType: "cursor", email: account.historyIdentity, salt: settings.historyIdentitySalt
         ) : nil
         if identity == nil || historyAccountKey != identity?.key {
+            planType = nil
             windows = []
             lastUpdated = nil
             usageResetDescription = nil
@@ -191,7 +193,7 @@ final class CodexUsageService: ObservableObject {
                 history.deactivateAccount()
             }
         }
-        planType = account.loggedIn ? (account.subscriptionType ?? "Cursor") : nil
+        planType = account.loggedIn ? (account.subscriptionType ?? planType ?? "Cursor") : nil
     }
 
     private func restoreLastKnownUsage(accountKey: String) {
